@@ -35,7 +35,7 @@ class ReportComplaintActivity : AppCompatActivity(), OnMapReadyCallback {
     private val viewModel: ComplaintViewModel by viewModels()
 
     private var googleMap: GoogleMap? = null
-    private var selectedLatLng: LatLng? = null
+    private var selectedLatLng: LatLng? = LatLng(40.7128, -74.0060)
     private var selectedAddress: String = ""
 
     private var imageUri: Uri? = null

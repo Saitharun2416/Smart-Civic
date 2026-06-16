@@ -224,27 +224,42 @@ class ComplaintRepository {
         }
         handler.postDelayed(timeoutRunnable, 3000)
 
-        db.runTransaction { transaction ->
-            val complaintDoc = transaction.get(complaintRef)
-            
-            if (!complaintDoc.exists()) throw Exception("Complaint not found")
-            
-            // 1. Update complaint
-            transaction.update(
-                complaintRef,
-                mapOf(
-                    "status" to "In Progress",
-                    "workerId" to workerId,
-                    "workerName" to workerName,
-                    "acceptedAt" to Timestamp.now()
-                )
+        // 1. Update Complaint Document
+        complaintRef.update(
+            mapOf(
+                "status" to "In Progress",
+                "workerId" to workerId,
+                "workerName" to workerName,
+                "acceptedAt" to Timestamp.now()
             )
-        }.addOnSuccessListener {
-            if (!completed) {
-                completed = true
-                handler.removeCallbacks(timeoutRunnable)
-                callback(Result.success(Unit))
-            }
+        ).addOnSuccessListener {
+            // 2. Increment Worker's Active Tasks
+            workerRef.update("activeTasks", com.google.firebase.firestore.FieldValue.increment(1))
+                .addOnCompleteListener {
+                    // Create Notification for Citizen
+                    complaintRef.get().addOnSuccessListener { complaintDoc ->
+                        val citizenId = complaintDoc.getString("citizenId") ?: ""
+                        val title = complaintDoc.getString("title") ?: ""
+                        val notifId = db.collection("notifications").document().id
+                        val notif = hashMapOf(
+                            "notifId" to notifId,
+                            "recipientId" to citizenId,
+                            "title" to "Complaint In Progress",
+                            "body" to "Your complaint \"$title\" has been accepted by $workerName.",
+                            "type" to "complaint_accepted",
+                            "complaintId" to complaintId,
+                            "isRead" to false,
+                            "createdAt" to Timestamp.now()
+                        )
+                        db.collection("notifications").document(notifId).set(notif)
+                    }
+
+                    if (!completed) {
+                        completed = true
+                        handler.removeCallbacks(timeoutRunnable)
+                        callback(Result.success(Unit))
+                    }
+                }
         }.addOnFailureListener { e ->
             if (!completed) {
                 completed = true
@@ -268,23 +283,48 @@ class ComplaintRepository {
             }
             handler.postDelayed(timeoutRunnable, 3000)
 
-            db.runTransaction { transaction ->
-                val complaintDoc = transaction.get(complaintRef)
-                if (!complaintDoc.exists()) throw Exception("Complaint not found")
-                
-                val resolvedAt = Timestamp.now()
-                
-                // 1. Update Complaint to "Verification Pending"
-                val updateMap = mutableMapOf<String, Any>(
-                    "status" to "Verification Pending",
-                    "proofImageUrl" to downloadUrl,
-                    "resolvedAt" to resolvedAt
-                )
-                if (workerNotes != null) {
-                    updateMap["workerNotes"] = workerNotes
+            val resolvedAt = Timestamp.now()
+            val updateMap = mutableMapOf<String, Any>(
+                "status" to "Verification Pending",
+                "proofImageUrl" to downloadUrl,
+                "resolvedAt" to resolvedAt
+            )
+            if (workerNotes != null) {
+                updateMap["workerNotes"] = workerNotes
+            }
+
+            complaintRef.update(updateMap).addOnSuccessListener {
+                complaintRef.get().addOnSuccessListener { complaintDoc ->
+                    val workerId = complaintDoc.getString("workerId") ?: ""
+                    val citizenId = complaintDoc.getString("citizenId") ?: ""
+                    val title = complaintDoc.getString("title") ?: ""
+                    val workerName = complaintDoc.getString("workerName") ?: "Worker"
+
+                    if (workerId.isNotEmpty()) {
+                        // Decrement Worker's Active Tasks
+                        val workerRef = db.collection("workers").document(workerId)
+                        workerRef.get().addOnSuccessListener { workerDoc ->
+                            val currentActive = workerDoc.getLong("activeTasks") ?: 0
+                            val newActive = Math.max(0, currentActive - 1)
+                            workerRef.update("activeTasks", newActive)
+                        }
+                    }
+
+                    // Create Notification for Citizen
+                    val notifId = db.collection("notifications").document().id
+                    val notif = hashMapOf(
+                        "notifId" to notifId,
+                        "recipientId" to citizenId,
+                        "title" to "Work Finished",
+                        "body" to "The issue \"$title\" has been finished by $workerName and is pending admin verification.",
+                        "type" to "complaint_verification_pending",
+                        "complaintId" to complaintId,
+                        "isRead" to false,
+                        "createdAt" to Timestamp.now()
+                    )
+                    db.collection("notifications").document(notifId).set(notif)
                 }
-                transaction.update(complaintRef, updateMap)
-            }.addOnSuccessListener {
+
                 if (!completed) {
                     completed = true
                     handler.removeCallbacks(timeoutRunnable)
@@ -332,6 +372,51 @@ class ComplaintRepository {
                 "citizenFeedback" to feedback
             )
             complaintRef.update(updates).addOnSuccessListener {
+                if (workerId != null && workerId.isNotEmpty()) {
+                    val workerRef = db.collection("workers").document(workerId)
+                    workerRef.get().addOnSuccessListener { workerDoc ->
+                        if (workerDoc.exists()) {
+                            var points = workerDoc.getLong("totalPoints") ?: 0
+                            val solved = workerDoc.getLong("issuesSolved") ?: 1
+                            var currentAvgRating = workerDoc.getDouble("averageRating") ?: 0.0
+
+                            val divider = Math.max(1, solved.toInt())
+                            if (currentAvgRating == 0.0) {
+                                currentAvgRating = rating.toDouble()
+                            } else {
+                                currentAvgRating = (currentAvgRating * (divider - 1) + rating) / divider
+                            }
+
+                            // High rating bonus
+                            val workerUpdates = mutableMapOf<String, Any>(
+                                "averageRating" to currentAvgRating
+                            )
+                            if (rating >= 4) {
+                                points += 5
+                                workerUpdates["totalPoints"] = points
+                                
+                                // Create notification for worker about bonus points
+                                val notifId = db.collection("notifications").document().id
+                                val notif = hashMapOf(
+                                    "notifId" to notifId,
+                                    "recipientId" to workerId,
+                                    "title" to "Rating Bonus!",
+                                    "body" to "Citizen rated you $rating stars! You earned +5 points.",
+                                    "type" to "points_earned",
+                                    "complaintId" to complaintId,
+                                    "isRead" to false,
+                                    "createdAt" to Timestamp.now()
+                                )
+                                db.collection("notifications").document(notifId).set(notif)
+                            }
+                            
+                            workerRef.update(workerUpdates).addOnCompleteListener {
+                                recalculateRanks()
+                            }
+                        }
+                    }
+                }
+
                 if (!completed) {
                     completed = true
                     handler.removeCallbacks(timeoutRunnable)
@@ -367,19 +452,129 @@ class ComplaintRepository {
         }
         handler.postDelayed(timeoutRunnable, 3000)
 
-        db.runTransaction { transaction ->
-            val complaintDoc = transaction.get(complaintRef)
-            if (!complaintDoc.exists()) throw Exception("Complaint not found")
-            
-            // 1. Update Complaint
-            transaction.update(
-                complaintRef,
-                mapOf(
-                    "status" to newStatus,
-                    "verified" to approve
-                )
+        complaintRef.update(
+            mapOf(
+                "status" to newStatus,
+                "verified" to approve
             )
-        }.addOnSuccessListener {
+        ).addOnSuccessListener {
+            complaintRef.get().addOnSuccessListener { complaintDoc ->
+                val workerId = complaintDoc.getString("workerId") ?: ""
+                val citizenId = complaintDoc.getString("citizenId") ?: ""
+                val title = complaintDoc.getString("title") ?: ""
+                val workerName = complaintDoc.getString("workerName") ?: "Worker"
+
+                if (workerId.isNotEmpty()) {
+                    val workerRef = db.collection("workers").document(workerId)
+                    workerRef.get().addOnSuccessListener { workerDoc ->
+                        if (workerDoc.exists()) {
+                            var points = workerDoc.getLong("totalPoints") ?: 0
+                            var solved = workerDoc.getLong("issuesSolved") ?: 0
+                            var newAvgTime = workerDoc.getDouble("averageResolutionTimeMinutes") ?: 0.0
+
+                            if (approve) {
+                                points += 10
+                                solved += 1
+
+                                val acceptedAt = complaintDoc.getTimestamp("acceptedAt")
+                                val resolvedAt = complaintDoc.getTimestamp("resolvedAt")
+                                if (acceptedAt != null && resolvedAt != null) {
+                                    val acceptedMillis = acceptedAt.toDate().time
+                                    val resolvedMillis = resolvedAt.toDate().time
+                                    val diffMinutes = (resolvedMillis - acceptedMillis) / 60000.0
+
+                                    if (diffMinutes > 0) {
+                                        // Fast bonus (+5 points if resolved in < 120 minutes)
+                                        if (diffMinutes < 120.0) {
+                                            points += 5
+                                            
+                                            val notifId = db.collection("notifications").document().id
+                                            val notif = hashMapOf(
+                                                "notifId" to notifId,
+                                                "recipientId" to workerId,
+                                                "title" to "Fast Resolution Bonus!",
+                                                "body" to "You resolved the task in under 2 hours! You earned +5 points.",
+                                                "type" to "points_earned",
+                                                "complaintId" to complaintId,
+                                                "isRead" to false,
+                                                "createdAt" to Timestamp.now()
+                                            )
+                                            db.collection("notifications").document(notifId).set(notif)
+                                        }
+
+                                        // Update average resolution time
+                                        if (newAvgTime == 0.0 || solved == 1L) {
+                                            newAvgTime = diffMinutes
+                                        } else {
+                                            newAvgTime = (newAvgTime * (solved - 1) + diffMinutes) / solved
+                                        }
+                                    }
+                                }
+
+                                workerRef.update(
+                                    mapOf(
+                                        "totalPoints" to points,
+                                        "issuesSolved" to solved,
+                                        "averageResolutionTimeMinutes" to newAvgTime
+                                    )
+                                ).addOnCompleteListener {
+                                    recalculateRanks()
+                                }
+
+                                // Create Notification for Citizen
+                                val notifId = db.collection("notifications").document().id
+                                val notif = hashMapOf(
+                                    "notifId" to notifId,
+                                    "recipientId" to citizenId,
+                                    "title" to "Issue Resolved!",
+                                    "body" to "The issue \"$title\" has been marked as resolved by $workerName. Please rate their service!",
+                                    "type" to "complaint_resolved",
+                                    "complaintId" to complaintId,
+                                    "isRead" to false,
+                                    "createdAt" to Timestamp.now()
+                                )
+                                db.collection("notifications").document(notifId).set(notif)
+
+                                // Create Notification for Worker
+                                val workerNotifId = db.collection("notifications").document().id
+                                val workerNotif = hashMapOf(
+                                    "notifId" to workerNotifId,
+                                    "recipientId" to workerId,
+                                    "title" to "Points Earned",
+                                    "body" to "You earned +10 points for resolving the task!",
+                                    "type" to "points_earned",
+                                    "complaintId" to complaintId,
+                                    "isRead" to false,
+                                    "createdAt" to Timestamp.now()
+                                )
+                                db.collection("notifications").document(workerNotifId).set(workerNotif)
+
+                            } else {
+                                // Rejected
+                                points = Math.max(0L, points - 10)
+                                workerRef.update("totalPoints", points).addOnCompleteListener {
+                                    recalculateRanks()
+                                }
+
+                                // Create Notification for Worker
+                                val workerNotifId = db.collection("notifications").document().id
+                                val workerNotif = hashMapOf(
+                                    "notifId" to workerNotifId,
+                                    "recipientId" to workerId,
+                                    "title" to "Task Rejected",
+                                    "body" to "Your completion for \"$title\" was rejected. 10 points deducted.",
+                                    "type" to "complaint_rejected",
+                                    "complaintId" to complaintId,
+                                    "isRead" to false,
+                                    "createdAt" to Timestamp.now()
+                                )
+                                db.collection("notifications").document(workerNotifId).set(workerNotif)
+                            }
+                        }
+                    }
+                }
+            }
+
             if (!completed) {
                 completed = true
                 handler.removeCallbacks(timeoutRunnable)
@@ -407,32 +602,28 @@ class ComplaintRepository {
         }
         handler.postDelayed(timeoutRunnable, 3000)
 
-        db.runTransaction { transaction ->
-            val complaintDoc = transaction.get(complaintRef)
-            if (!complaintDoc.exists()) throw Exception("Complaint not found")
-            val title = complaintDoc.getString("title") ?: ""
-            
-            transaction.update(
-                complaintRef,
-                mapOf(
-                    "workerId" to workerId,
-                    "workerName" to workerName
+        complaintRef.update(
+            mapOf(
+                "workerId" to workerId,
+                "workerName" to workerName
+            )
+        ).addOnSuccessListener {
+            complaintRef.get().addOnSuccessListener { complaintDoc ->
+                val title = complaintDoc.getString("title") ?: ""
+                val workerNotifId = db.collection("notifications").document().id
+                val workerNotif = hashMapOf(
+                    "notifId" to workerNotifId,
+                    "recipientId" to workerId,
+                    "title" to "New Task Assigned",
+                    "body" to "Admin has assigned you the task: \"$title\"",
+                    "type" to "task_assigned",
+                    "complaintId" to complaintId,
+                    "isRead" to false,
+                    "createdAt" to Timestamp.now()
                 )
-            )
-            
-            val workerNotifId = db.collection("notifications").document().id
-            val workerNotif = hashMapOf(
-                "notifId" to workerNotifId,
-                "recipientId" to workerId,
-                "title" to "New Task Assigned",
-                "body" to "Admin has assigned you the task: \"$title\"",
-                "type" to "task_assigned",
-                "complaintId" to complaintId,
-                "isRead" to false,
-                "createdAt" to Timestamp.now()
-            )
-            transaction.set(db.collection("notifications").document(workerNotifId), workerNotif)
-        }.addOnSuccessListener {
+                db.collection("notifications").document(workerNotifId).set(workerNotif)
+            }
+
             if (!completed) {
                 completed = true
                 handler.removeCallbacks(timeoutRunnable)
