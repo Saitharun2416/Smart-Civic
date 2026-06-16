@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/adminOverviewFragment"
+            android:icon="@drawable/ic_home"
+            android:title="Overview" />
+        <item
+            android:id="@+id/complaintsManagementFragment"
+            android:icon="@drawable/ic_my_complaints"
+            android:title="Complaints Management" />
+        <item
+            android:id="@+id/complaintVerificationFragment"
+            android:icon="@drawable/ic_tasks"
+            android:title="Verification" />
+        <item
+            android:id="@+id/userManagementFragment"
+            android:icon="@drawable/ic_profile"
+            android:title="User Management" />
+        <item
+            android:id="@+id/workerApprovalFragment"
+            android:icon="@drawable/ic_profile"
+            android:title="Worker Approval" />
+        <item
+            android:id="@+id/analyticsFragment"
+            android:icon="@drawable/ic_stats"
+            android:title="Analytics" />
+        <item
+            android:id="@+id/duplicateDetectionFragment"
+            android:icon="@drawable/ic_map"
+            android:title="Duplicate Detection" />
+    </group>
+    <group android:id="@+id/group_logout">
+        <item
+            android:id="@+id/adminLogout"
+            android:icon="@drawable/ic_profile"
+            android:title="Logout" />
+    </group>
+</menu>

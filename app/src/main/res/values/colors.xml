@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#1565C0</color>
+    <color name="primary_variant">#0D47A1</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <color name="secondary">#2E7D32</color>
+    <color name="secondary_variant">#1B5E20</color>
+    <color name="on_secondary">#FFFFFF</color>
+
+    <color name="error">#C62828</color>
+    <color name="on_error">#FFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="status_pending">#EF6C00</color>    <!-- Orange -->
+    <color name="status_in_progress">#1565C0</color> <!-- Blue -->
+    <color name="status_resolved">#2E7D32</color>    <!-- Green -->
+    <color name="status_rejected">#C62828</color>    <!-- Red -->
+
+    <color name="status_pending_bg">#FFF3E0</color>
+    <color name="status_in_progress_bg">#E3F2FD</color>
+    <color name="status_resolved_bg">#E8F5E9</color>
+    <color name="status_rejected_bg">#FFEBEE</color>
+    <color name="status_verification_pending">#8E24AA</color>
+    <color name="status_verification_pending_bg">#F3E5F5</color>
+
+    <!-- Backgrounds -->
+    <color name="background_light">#F5F7FA</color>
+    <color name="background_dark">#121212</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_dark">#1E1E1E</color>
+
+    <!-- Neutrals -->
+    <color name="text_primary_light">#212121</color>
+    <color name="text_secondary_light">#4A4A4A</color>
+    <color name="text_primary_dark">#E0E0E0</color>
+    <color name="text_secondary_dark">#9E9E9E</color>
+    
+    <color name="divider_light">#E0E0E0</color>
+    <color name="divider_dark">#333333</color>
+    <color name="shimmer_bg">#E0E0E0</color>
+</resources>

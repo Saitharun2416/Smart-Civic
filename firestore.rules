@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'admin';
+    }
+    
+    function isWorker() {
+      return isAuthenticated() && getUserData().role == 'worker';
+    }
+    
+    function isCitizen() {
+      return isAuthenticated() && getUserData().role == 'citizen';
+    }
+
+    // Users rules
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // Complaints rules
+    match /complaints/{complaintId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.citizenId == request.auth.uid; // Citizens can report issues under their own UID
+      allow update: if isAdmin() ||
+        (isCitizen() && resource.data.citizenId == request.auth.uid && 
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['citizenRating', 'citizenFeedback'])) ||
+        (isWorker() && (
+          // Case 1: Accepting a task
+          (resource.data.status == 'Pending' && request.resource.data.status == 'In Progress' && request.resource.data.workerId == request.auth.uid) ||
+          // Case 2: Resolving a task
+          (resource.data.workerId == request.auth.uid && resource.data.status == 'In Progress' && request.resource.data.status == 'Verification Pending')
+        ));
+      allow delete: if isAdmin();
+    }
+
+    // Workers rules
+    match /workers/{workerId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin() || (isAuthenticated() && request.auth.uid == workerId);
+      allow update: if isAdmin() || (
+        isAuthenticated() && request.auth.uid == workerId &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          'totalPoints', 'issuesSolved', 'averageResolutionTimeMinutes',
+          'averageRating', 'rank', 'badges'
+        ])
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Notifications rules
+    match /notifications/{notifId} {
+      allow read: if isAuthenticated() && (resource.data.recipientId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated(); // Allow creation client-side
+      allow update, delete: if isAuthenticated() && (resource.data.recipientId == request.auth.uid || isAdmin()); // Restrict modification
+    }
+  }
+}

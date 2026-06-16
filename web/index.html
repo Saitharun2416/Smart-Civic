@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Civic Governance Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Vanilla CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header class="main-header">
+            <div class="logo-area">
+                <i class="fa-solid fa-building-columns brand-icon"></i>
+                <div class="logo-text">
+                    <h1>CivicSmart</h1>
+                    <p>Smart Governance & Leaderboard Portal</p>
+                </div>
+            </div>
+            
+            <!-- Quick Role Switcher for E2E Testing & Demos -->
+            <div class="role-selector-container">
+                <label for="role-selector"><i class="fa-solid fa-user-gear"></i> Active Role:</label>
+                <select id="role-selector" class="role-selector">
+                    <option value="citizen">Citizen (Resident)</option>
+                    <option value="worker" selected>Worker (Field Agent)</option>
+                    <option value="admin">Administrator</option>
+                </select>
+            </div>
+
+            <div class="user-profile-summary">
+                <div class="user-avatar" id="header-avatar">C</div>
+                <div class="user-info">
+                    <h4 id="header-username">Loading User...</h4>
+                    <p id="header-user-role">Role</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body -->
+        <main class="main-content">
+            
+            <!-- Active Tab/View Container -->
+            <div id="view-citizen" class="portal-view hidden">
+                <div class="view-header">
+                    <h2><i class="fa-solid fa-house-chimney"></i> Citizen Dashboard</h2>
+                    <p>Report issues in your neighborhood, view details, rate resolutions, and check notifications.</p>
+                </div>
+                
+                <div class="grid-layout cols-2">
+                    <!-- Report Complaint Card -->
+                    <div class="glass-card">
+                        <h3><i class="fa-solid fa-file-medical"></i> Report a Civic Complaint</h3>
+                        <form id="report-complaint-form" class="standard-form">
+                            <div class="form-group">
+                                <label for="complaint-title">Complaint Title</label>
+                                <input type="text" id="complaint-title" placeholder="Brief descriptive title (e.g. Main Street Pothole)" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="complaint-desc">Description</label>
+                                <textarea id="complaint-desc" rows="3" placeholder="Explain the issue in detail" required></textarea>
+                            </div>
+
+                            <div class="grid-layout cols-2 small-gap">
+                                <div class="form-group">
+                                    <label for="complaint-category">Category</label>
+                                    <select id="complaint-category" required>
+                                        <option value="Pothole">Pothole</option>
+                                        <option value="Garbage">Garbage / Litter</option>
+                                        <option value="Water Leakage">Water Leakage</option>
+                                        <option value="Drainage">Drainage Overflow</option>
+                                        <option value="Streetlight">Streetlight Outage</option>
+                                        <option value="Traffic">Traffic Issue</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="complaint-priority">Priority</label>
+                                    <select id="complaint-priority" required>
+                                        <option value="Low">Low</option>
+                                        <option value="Medium" selected>Medium</option>
+                                        <option value="High">High</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid-layout cols-2 small-gap">
+                                <div class="form-group">
+                                    <label for="complaint-lat">Latitude</label>
+                                    <input type="number" step="0.000001" id="complaint-lat" value="12.971598" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="complaint-lng">Longitude</label>
+                                    <input type="number" step="0.000001" id="complaint-lng" value="77.594562" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="complaint-address">Street Address</label>
+                                <input type="text" id="complaint-address" placeholder="e.g. 5th Main, Outer Ring Road, Bangalore" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="complaint-image">Attach Photo URL</label>
+                                <input type="url" id="complaint-image" placeholder="Image URL (e.g. https://picsum.photos/400/300)" value="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?w=400">
+                            </div>
+
+                            <button type="submit" id="btn-submit-complaint" class="primary-btn"><i class="fa-solid fa-paper-plane"></i> Submit Complaint</button>
+                        </form>
+                    </div>
+
+                    <!-- My Complaints List Card -->
+                    <div class="glass-card">
+                        <h3><i class="fa-solid fa-list-check"></i> My Reported Complaints</h3>
+                        <div class="complaints-list" id="citizen-complaints-list">
+                            <!-- Populated dynamically -->
+                            <div class="empty-state">No complaints reported yet.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Worker Portal View -->
+            <div id="view-worker" class="portal-view">
+                <div class="view-header">
+                    <h2><i class="fa-solid fa-helmet-safety"></i> Worker Board & Leaderboard</h2>
+                    <p>Accept pending complaints, submit photographic proof of resolutions, and view your current performance stats.</p>
+                </div>
+                
+                <!-- Worker Stats Dashboard -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <i class="fa-solid fa-award card-icon icon-yellow"></i>
+                        <div class="stat-content">
+                            <p>Leaderboard Rank</p>
+                            <h2 id="worker-rank">#1</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-star card-icon icon-purple"></i>
+                        <div class="stat-content">
+                            <p>Total Points</p>
+                            <h2 id="worker-points">0 PTS</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-circle-check card-icon icon-green"></i>
+                        <div class="stat-content">
+                            <p>Issues Solved</p>
+                            <h2 id="worker-solved">0</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-clock card-icon icon-blue"></i>
+                        <div class="stat-content">
+                            <p>Avg Resolution Time</p>
+                            <h2 id="worker-avg-time">0m</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-layout cols-2">
+                    <!-- Available Tasks & Active Tasks -->
+                    <div class="flex-column">
+                        <!-- Active Tasks -->
+                        <div class="glass-card margin-bottom">
+                            <h3><i class="fa-solid fa-person-digging"></i> Active Assigned Tasks</h3>
+                            <div class="tasks-list" id="worker-active-tasks">
+                                <!-- Populated dynamically -->
+                                <div class="empty-state">No active tasks in progress.</div>
+                            </div>
+                        </div>
+
+                        <!-- Available Tasks -->
+                        <div class="glass-card">
+                            <h3><i class="fa-solid fa-magnifying-glass-location"></i> Available Civic Alerts</h3>
+                            <div class="tasks-list" id="worker-available-tasks">
+                                <!-- Populated dynamically -->
+                                <div class="empty-state">No pending complaints. All clean!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Global Leaderboard -->
+                    <div class="glass-card">
+                        <h3><i class="fa-solid fa-ranking-star"></i> Worker Leaderboard</h3>
+                        <div class="leaderboard-table-container">
+                            <table class="data-table" id="leaderboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Worker</th>
+                                        <th>Points</th>
+                                        <th>Solved</th>
+                                        <th>Avg Rating</th>
+                                        <th>Badges</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-body">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Portal View -->
+            <div id="view-admin" class="portal-view hidden">
+                <div class="view-header">
+                    <h2><i class="fa-solid fa-shield-halved"></i> Administrator Operations Center</h2>
+                    <p>Review submitted proofs of resolution, manage users, configure worker assignments, and detect duplicates.</p>
+                </div>
+
+                <div class="grid-layout cols-3 stats-row-admin">
+                    <div class="stat-card">
+                        <i class="fa-solid fa-folder-open card-icon icon-blue"></i>
+                        <div class="stat-content">
+                            <p>Total Complaints</p>
+                            <h2 id="admin-total-complaints">0</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-triangle-exclamation card-icon icon-yellow"></i>
+                        <div class="stat-content">
+                            <p>Pending Verifications</p>
+                            <h2 id="admin-pending-verifications">0</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-clone card-icon icon-red"></i>
+                        <div class="stat-content">
+                            <p>Duplicate Alerts</p>
+                            <h2 id="admin-duplicates">0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="tab-container glass-card">
+                    <div class="tab-header">
+                        <button class="tab-btn active" data-tab="tab-verification"><i class="fa-solid fa-clipboard-check"></i> Verification Queue</button>
+                        <button class="tab-btn" data-tab="tab-management"><i class="fa-solid fa-list"></i> All Complaints</button>
+                        <button class="tab-btn" data-tab="tab-users"><i class="fa-solid fa-users-gear"></i> User Control</button>
+                        <button class="tab-btn" data-tab="tab-duplicates"><i class="fa-solid fa-clone"></i> Duplicate Detection</button>
+                    </div>
+
+                    <div class="tab-content-container">
+                        <!-- Verification Queue -->
+                        <div id="tab-verification" class="tab-pane active">
+                            <div class="pane-header">
+                                <h3>Verify Completion Proofs</h3>
+                                <p>Approve resolution submissions to award points to workers, or reject them to apply point penalties.</p>
+                            </div>
+                            <div class="verification-list" id="admin-verification-list">
+                                <!-- Populated dynamically -->
+                                <div class="empty-state">No resolutions pending verification.</div>
+                            </div>
+                        </div>
+
+                        <!-- All Complaints Management -->
+                        <div id="tab-management" class="tab-pane">
+                            <div class="pane-header">
+                                <h3>All Reported Incidents</h3>
+                                <p>View and manage all system complaints. Admins can manually assign workers or delete reports.</p>
+                            </div>
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Priority</th>
+                                            <th>Citizen</th>
+                                            <th>Worker</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-all-complaints-body">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- User Management -->
+                        <div id="tab-users" class="tab-pane">
+                            <div class="pane-header">
+                                <h3>User Accounts Management</h3>
+                                <p>Enable or disable citizen and worker profiles, verify credentials, and manage roles.</p>
+                            </div>
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Avatar</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Joined Date</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-users-body">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Duplicate Detection -->
+                        <div id="tab-duplicates" class="tab-pane">
+                            <div class="pane-header">
+                                <h3>Duplicate Incident Detection</h3>
+                                <p>System automatically flags reported complaints within 100 meters filed within the last 24 hours.</p>
+                            </div>
+                            <div class="verification-list" id="admin-duplicate-list">
+                                <!-- Populated dynamically -->
+                                <div class="empty-state">No duplicate complaints flagged by system.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Drawer -->
+            <div class="notifications-panel glass-card">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-bell"></i> Alerts & Notifications</h3>
+                    <span id="unread-count" class="badge badge-red">0 New</span>
+                </div>
+                <div class="notifications-list" id="notifications-list">
+                    <!-- Populated dynamically -->
+                    <div class="empty-state">No alerts. You are up to date!</div>
+                </div>
+            </div>
+            
+        </main>
+        
+        <!-- Footer -->
+        <footer class="main-footer">
+            <p>&copy; 2026 Smart Civic Governance Framework. Built for CI/CD, Security, and E2E automation testing.</p>
+        </footer>
+
+        <!-- Submit Proof Modal -->
+        <div id="submit-proof-modal" class="modal-overlay hidden">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h3><i class="fa-solid fa-camera"></i> Submit Resolution Proof</h3>
+                    <button id="btn-close-modal" class="close-btn">&times;</button>
+                </div>
+                <form id="submit-proof-form" class="standard-form">
+                    <input type="hidden" id="modal-complaint-id">
+                    <div class="form-group">
+                        <label for="proof-title">Selected Complaint</label>
+                        <input type="text" id="proof-complaint-title" readonly class="readonly-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="proof-image-url">Resolution Proof Photo URL</label>
+                        <input type="url" id="proof-image-url" placeholder="URL to resolution proof image" value="https://images.unsplash.com/photo-1473842191133-c2d2745a303a?w=400" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="proof-notes">Worker Notes</label>
+                        <textarea id="proof-notes" rows="3" placeholder="Describe the resolution work (e.g. repaved the pothole successfully)"></textarea>
+                    </div>
+                    <button type="submit" class="primary-btn"><i class="fa-solid fa-circle-check"></i> Submit Resolution Proof</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Rating Modal -->
+        <div id="rating-modal" class="modal-overlay hidden">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h3><i class="fa-solid fa-star"></i> Rate Worker Service</h3>
+                    <button id="btn-close-rating-modal" class="close-btn">&times;</button>
+                </div>
+                <form id="submit-rating-form" class="standard-form">
+                    <input type="hidden" id="modal-rating-complaint-id">
+                    <div class="form-group">
+                        <label for="rating-complaint-title">Complaint Title</label>
+                        <input type="text" id="rating-complaint-title" readonly class="readonly-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Service Rating</label>
+                        <div class="star-rating">
+                            <input type="radio" name="stars" id="star-5" value="5" required><label for="star-5" class="fa-solid fa-star"></label>
+                            <input type="radio" name="stars" id="star-4" value="4"><label for="star-4" class="fa-solid fa-star"></label>
+                            <input type="radio" name="stars" id="star-3" value="3"><label for="star-3" class="fa-solid fa-star"></label>
+                            <input type="radio" name="stars" id="star-2" value="2"><label for="star-2" class="fa-solid fa-star"></label>
+                            <input type="radio" name="stars" id="star-1" value="1"><label for="star-1" class="fa-solid fa-star"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rating-feedback">Feedback & Comments</label>
+                        <textarea id="rating-feedback" rows="3" placeholder="Provide any additional comments about the service"></textarea>
+                    </div>
+                    <button type="submit" class="primary-btn"><i class="fa-solid fa-check-double"></i> Submit Review</button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Firebase SDK (CDN fallbacks) & App scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
