@@ -74,7 +74,8 @@ jobs:
         with:
           name: Appium-Test-Report
           path: |
-            Test Results/Excel/Automation_Test_Report.xlsx
+            Test Results/Excel/Test_Report.xlsx
+            Test Results/Excel/Backend_Test_Report.xlsx
             Test Results/HTML/execution-report.html
             Test Results/Screenshots/
             Test Results/Logs/
@@ -110,14 +111,16 @@ jobs:
           # Copy reports to latest
           cp "Test Results/HTML/execution-report.html" gh-pages-dir/reports/latest/ 2>/dev/null || true
           cp "Test Results/Summary/summary.md" gh-pages-dir/reports/latest/ 2>/dev/null || true
-          cp "Test Results/Excel/Automation_Test_Report.xlsx" gh-pages-dir/reports/latest/ 2>/dev/null || true
+          cp "Test Results/Excel/Test_Report.xlsx" gh-pages-dir/reports/latest/ 2>/dev/null || true
+          cp "Test Results/Excel/Backend_Test_Report.xlsx" gh-pages-dir/reports/latest/ 2>/dev/null || true
           cp -r Test\ Results/Screenshots/* gh-pages-dir/reports/latest/screenshots/ 2>/dev/null || true
           cp -r Test\ Results/Logs/* gh-pages-dir/reports/latest/logs/ 2>/dev/null || true
           
           # Copy reports to history build folder
           cp "Test Results/HTML/execution-report.html" gh-pages-dir/reports/history/build-${{ github.run_number }}/ 2>/dev/null || true
           cp "Test Results/Summary/summary.md" gh-pages-dir/reports/history/build-${{ github.run_number }}/ 2>/dev/null || true
-          cp "Test Results/Excel/Automation_Test_Report.xlsx" gh-pages-dir/reports/history/build-${{ github.run_number }}/ 2>/dev/null || true
+          cp "Test Results/Excel/Test_Report.xlsx" gh-pages-dir/reports/history/build-${{ github.run_number }}/ 2>/dev/null || true
+          cp "Test Results/Excel/Backend_Test_Report.xlsx" gh-pages-dir/reports/history/build-${{ github.run_number }}/ 2>/dev/null || true
           cp -r Test\ Results/Screenshots/* gh-pages-dir/reports/history/build-${{ github.run_number }}/screenshots/ 2>/dev/null || true
           cp -r Test\ Results/Logs/* gh-pages-dir/reports/history/build-${{ github.run_number }}/logs/ 2>/dev/null || true
           
