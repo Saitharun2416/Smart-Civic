@@ -71,7 +71,11 @@ jobs:
             
             # Loop with timeout (max 90 seconds)
             COUNTER=0
-            while [ "$(adb shell getprop sys.boot_completed)" != "1" ]; do
+            while :; do
+              BOOT_STATUS=$(adb shell getprop sys.boot_completed 2>/dev/null || echo "0")
+              if [ "$BOOT_STATUS" = "1" ]; then
+                break
+              fi
               echo "Emulator still booting..."
               sleep 5
               COUNTER=$((COUNTER+5))
