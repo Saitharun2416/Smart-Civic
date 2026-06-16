@@ -71,40 +71,7 @@ jobs:
           arch: x86_64
           force-avd-creation: false
           disable-spellchecker: true
-          script: |
-            # Start Appium server in background
-            appium --log Test_Results/Logs/appium_server.log &
-            
-            # Wait longer for Appium to fully spin up
-            sleep 15
-            
-            # Wait for emulator to be fully ready (boot_completed property)
-            echo "Waiting for emulator to be fully booted..."
-            adb wait-for-device || true
-            
-            # Loop with timeout (max 90 seconds)
-            COUNTER=0
-            while :; do
-              BOOT_STATUS=$(adb shell getprop sys.boot_completed 2>/dev/null || echo "0")
-              if [ "$BOOT_STATUS" = "1" ]; then
-                break
-              fi
-              echo "Emulator still booting..."
-              sleep 5
-              COUNTER=$((COUNTER+5))
-              if [ $COUNTER -gt 90 ]; then
-                echo "Timeout waiting for emulator boot. Proceeding anyway..."
-                break
-              fi
-            done
-            echo "Emulator ready!"
-            sleep 5
-            
-            # Execute E2E Tests
-            python -m unittest tests/appium/test_app_flow.py
-            
-            # Kill Appium server
-            pkill -f appium || true
+          script: chmod +x scripts/run-e2e-tests.sh && ./scripts/run-e2e-tests.sh
 
       - name: Upload Test Results Artifacts
         if: always()
