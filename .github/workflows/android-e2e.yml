@@ -61,14 +61,24 @@ jobs:
           script: |
             # Start Appium server in background
             appium --log Test_Results/Logs/appium_server.log &
-            # Wait for Appium to spin up
-            sleep 10
+            
+            # Wait longer for Appium to fully spin up
+            sleep 15
+            
+            # Wait for emulator to be fully ready (boot_completed property)
+            echo "Waiting for emulator to be fully booted..."
+            adb wait-for-device
+            while [ "$(adb shell getprop sys.boot_completed)" != "1" ]; do
+              echo "Emulator still booting..."
+              sleep 2
+            done
+            echo "Emulator ready!"
+            sleep 5
             
             # Execute E2E Tests
-            # Appium script will run in simulator fallback mode if Appium driver connection fails
             python -m unittest tests/appium/test_app_flow.py
             
-            # Kill Appium server to prevent the step from hanging
+            # Kill Appium server
             pkill -f appium || true
 
       - name: Upload Test Results Artifacts
