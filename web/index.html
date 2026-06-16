@@ -43,6 +43,7 @@
                     <h4 id="header-username">Loading User...</h4>
                     <p id="header-user-role">Role</p>
                 </div>
+                <button id="btn-logout" class="logout-btn" title="Sign Out" style="background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 1.25rem; margin-left: 1rem; transition: color 0.2s;"><i class="fa-solid fa-right-from-bracket"></i></button>
             </div>
         </header>
 
@@ -412,9 +413,65 @@
             </div>
         </div>
         
+        <!-- Auth Overlay (Login / Register) -->
+        <div id="auth-overlay" class="modal-overlay">
+            <div class="modal-content auth-card glass-card">
+                <div class="auth-header">
+                    <i class="fa-solid fa-building-columns brand-icon" style="font-size: 2.5rem; color: #a855f7; margin-bottom: 1rem;"></i>
+                    <h2>CivicSmart Login</h2>
+                    <p id="auth-subtitle" style="color: rgba(255, 255, 255, 0.7); margin-top: 0.25rem;">Welcome to the CivicSmart Governance Portal</p>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="login-form" class="standard-form">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" placeholder="e.g. citizen@gmail.com" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="Enter password" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="primary-btn" style="margin-top: 1rem;"><i class="fa-solid fa-right-to-bracket"></i> Sign In</button>
+                    <p class="auth-toggle" style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);">Don't have an account? <span id="toggle-to-register" style="color: #a855f7; cursor: pointer; font-weight: 600; text-decoration: underline;">Register here</span></p>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-form" class="standard-form hidden">
+                    <div class="form-group">
+                        <label for="register-name">Full Name</label>
+                        <input type="text" id="register-name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email Address</label>
+                        <input type="email" id="register-email" placeholder="e.g. name@gmail.com" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" placeholder="Enter password (min 6 chars)" required minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-role">Account Role</label>
+                        <select id="register-role" required style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15);">
+                            <option value="citizen">Citizen (Resident)</option>
+                            <option value="worker">Worker (Field Agent)</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="primary-btn" style="margin-top: 1rem;"><i class="fa-solid fa-user-plus"></i> Create Account</button>
+                    <p class="auth-toggle" style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);">Already have an account? <span id="toggle-to-login" style="color: #a855f7; cursor: pointer; font-weight: 600; text-decoration: underline;">Sign In here</span></p>
+                </form>
+            </div>
+        </div>
+        
     </div>
 
-    <!-- Firebase SDK (CDN fallbacks) & App scripts -->
+    <!-- Firebase SDK (v8 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <!-- App scripts -->
     <script src="app.js"></script>
 </body>
 </html>
