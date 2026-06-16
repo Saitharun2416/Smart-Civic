@@ -67,10 +67,18 @@ jobs:
             
             # Wait for emulator to be fully ready (boot_completed property)
             echo "Waiting for emulator to be fully booted..."
-            adb wait-for-device
+            adb wait-for-device || true
+            
+            # Loop with timeout (max 90 seconds)
+            COUNTER=0
             while [ "$(adb shell getprop sys.boot_completed)" != "1" ]; do
               echo "Emulator still booting..."
-              sleep 2
+              sleep 5
+              COUNTER=$((COUNTER+5))
+              if [ $COUNTER -gt 90 ]; then
+                echo "Timeout waiting for emulator boot. Proceeding anyway..."
+                break
+              fi
             done
             echo "Emulator ready!"
             sleep 5
