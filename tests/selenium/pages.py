@@ -115,8 +115,6 @@ class PortalPage(BasePage):
             
         self.click(self.BTN_SUBMIT_COMPLAINT)
         
-        # Accept alert popup
-        self.driver.switch_to.alert.accept()
         time.sleep(0.5)
 
     def get_citizen_complaints(self):
@@ -158,7 +156,6 @@ class PortalPage(BasePage):
         for t in tasks:
             if complaint_title in t["title"]:
                 t["accept_button"].click()
-                self.driver.switch_to.alert.accept()
                 time.sleep(0.5)
                 return True
         return False
@@ -173,7 +170,6 @@ class PortalPage(BasePage):
                 self.type(self.PROOF_IMAGE_URL, proof_url)
                 self.type(self.PROOF_NOTES, notes)
                 self.click(self.BTN_SUBMIT_PROOF)
-                self.driver.switch_to.alert.accept()
                 time.sleep(0.5)
                 return True
         return False
@@ -242,7 +238,6 @@ class PortalPage(BasePage):
                 # Fill feedback
                 self.type(self.RATING_FEEDBACK, feedback)
                 self.click(self.BTN_SUBMIT_RATING)
-                self.driver.switch_to.alert.accept()
                 time.sleep(0.5)
                 return True
         return False

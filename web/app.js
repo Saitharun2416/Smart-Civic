@@ -31,6 +31,43 @@ if (isE2E) {
     document.body.classList.add("e2e-mode");
 }
 
+// Toast Notification Utility
+function showToast(message, type = "success") {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+    
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    
+    let iconClass = "fa-circle-check";
+    if (type === "error") iconClass = "fa-circle-xmark";
+    else if (type === "info") iconClass = "fa-circle-info";
+    
+    toast.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${message}</span>`;
+    container.appendChild(toast);
+    
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(-10px)";
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 4000);
+}
+
+// Override native alert globally for premium UI and E2E stability
+window.alert = function(msg) {
+    let type = "success";
+    const lower = msg.toLowerCase();
+    if (lower.includes("fail") || lower.includes("error") || lower.includes("denied") || lower.includes("disabled")) {
+        type = "error";
+    } else if (lower.includes("wait") || lower.includes("pending") || lower.includes("register")) {
+        type = "info";
+    }
+    showToast(msg, type);
+};
+
 // DOM Elements cache
 const els = {
     roleSelector: document.getElementById("role-selector"),
