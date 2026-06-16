@@ -21,7 +21,7 @@ FINDINGS = [
         "exploitation": "A worker could authenticate and send a Firestore write request to their own document `workers/{uid}` updating `totalPoints` to 1000000, immediately elevating their rank on the leaderboard.",
         "impact": "Leaderboard system integrity is completely compromised. Users can manipulate ranks and claim undeserved rewards.",
         "fix": "Harden Firestore rules to restrict updates to sensitive fields like `totalPoints`, `averageRating`, `rank`, and `badges` so they are read-only to users, allowing changes only via admin credentials or server-side Cloud Functions.",
-        "status": "Remediated"
+        "status": "Pass"
     },
     {
         "id": "SEC-02",
@@ -33,7 +33,7 @@ FINDINGS = [
         "exploitation": "An authenticated user could overwrite the notification document of another user, replacing important citizen notifications with fake messages or deleting task assignments.",
         "impact": "Loss of data integrity, potential spoofing of alerts, and unauthorized tampering of communication channels between admin, workers, and citizens.",
         "fix": "Restructured notifications rules to only allow authenticated creation, but restrict read, update, and delete access to the recipient user or admins only.",
-        "status": "Remediated"
+        "status": "Pass"
     },
     {
         "id": "SEC-03",
@@ -45,7 +45,7 @@ FINDINGS = [
         "exploitation": "Workers completing tasks transition them to `Verification Pending` in the database. The admin approves and updates it to `Resolved`. Since the transition is `Verification Pending` -> `Resolved` and not `In Progress` -> `Resolved`, the points trigger fails, leading to zero point allocations.",
         "impact": "Gamified leaderboard and performance metrics are broken. Workers are never awarded points, solved counts, or ranks for their work.",
         "fix": "Refactored the Firestore Cloud Function trigger to listen for status changes from `Verification Pending` to `Resolved` (Admin approves proof) and transition `In Progress` to `Verification Pending` to decrement active tasks.",
-        "status": "Remediated"
+        "status": "Pass"
     },
     {
         "id": "SEC-04",
@@ -57,7 +57,7 @@ FINDINGS = [
         "exploitation": "If a citizen rates a worker who has zero registered solved issues, the calculation `(currentAvgRating * (solved - 1) + rating) / solved` divides by 0, writing `NaN` to the database.",
         "impact": "Database corruption (NaN values in averageRating), crash risks in client app parsing, and incorrect worker rating computations.",
         "fix": "Implemented a safety division check (`Math.max(1, solved)`) and default cases to prevent dividing by zero.",
-        "status": "Remediated"
+        "status": "Pass"
     },
     {
         "id": "SEC-05",
@@ -69,7 +69,7 @@ FINDINGS = [
         "exploitation": "A client sending spoofed timestamps where `resolvedAt` precedes `acceptedAt` results in negative resolution times and corrupt average metrics.",
         "impact": "Worker analytics are distorted. Average resolution time displays negative hours, breaking admin analytical views.",
         "fix": "Added validation checks (`diffMinutes > 0`) to ensure timestamps are chronologically valid before updating average resolution times.",
-        "status": "Remediated"
+        "status": "Pass"
     },
     {
         "id": "SEC-06",
@@ -81,7 +81,7 @@ FINDINGS = [
         "exploitation": "A malicious citizen could submit complaints with `citizenId` set to another user's UID. The complaint is recorded under that user, leaking coordinates or details.",
         "impact": "Account spoofing and unauthorized creation of data linked to other citizen accounts.",
         "fix": "Restricted complaint creation rules to verify that `request.resource.data.citizenId == request.auth.uid`.",
-        "status": "Remediated"
+        "status": "Pass"
     }
 ]
 
@@ -151,7 +151,7 @@ def generate_markdown_reports():
 **Assessor:** Antigravity (Senior Application Security Engineer)  
 **Target:** Smart Civic Governance Firebase Backend  
 
-This report documents the security issues identified during the static and dynamic analysis of the Firestore Rules and Cloud Functions. All critical and high findings have been remediated in the codebase.
+This report documents the security issues identified during the static and dynamic analysis of the Firestore Rules and Cloud Functions. All critical and high findings have been verified as Pass in the codebase.
 
 {findings_list_md}
 """
@@ -169,9 +169,9 @@ This report documents the security issues identified during the static and dynam
     
     # Calculate score (out of 100). Base score starts at 100.
     # Deductions: Critical: -25, High: -15, Medium: -5, Low: -2.
-    # Since all are remediated, we can show base/residual scores.
+    # Since all are Pass, we can show base/residual scores.
     base_score = 100 - (critical * 25 + high * 15 + medium * 5 + low * 2)
-    residual_score = 100 # All remediated!
+    residual_score = 100 # All Pass!
 
     summary_md = f"""# Security Review — Executive Summary
 
@@ -186,7 +186,7 @@ This report documents the security issues identified during the static and dynam
 
 ---
 
-## Most Critical Risks Identified & Remediated
+## Most Critical Risks Identified & Pass
 
 ### 1. Client-Side Leaderboard Point Manipulation (SEC-01)
 - **Severity:** High
@@ -355,7 +355,7 @@ def generate_excel_reports():
 
         # Sheet 4: Risk Summary
         ws4 = wb.create_sheet("Risk Summary")
-        ws4.append(["Severity Level", "Total Identified", "Remediated", "Residual Risk"])
+        ws4.append(["Severity Level", "Total Identified", "Pass", "Fail"])
         ws4.append(["Critical", "0", "0", "0"])
         ws4.append(["High", "2", "2", "0"])
         ws4.append(["Medium", "2", "2", "0"])

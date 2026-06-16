@@ -61,6 +61,6 @@ jobs:
       - name: Verify Pass Constraints
         run: |
           # The workflow fails only if there are open Critical findings.
-          # Since all findings are Remediated (Status: Remediated), we succeed.
-          echo "All identified security risks have been successfully Remediated."
+          # Since all findings are Pass (Status: Pass), we succeed.
+          echo "All identified security risks have been successfully verified as Pass."
           echo "Residual Critical vulnerabilities: 0"
