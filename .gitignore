@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Python and E2E results
+__pycache__/
+*.pyc
+Test Results/
+.pytest_cache/
