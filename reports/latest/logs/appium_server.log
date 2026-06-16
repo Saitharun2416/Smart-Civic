@@ -1,0 +1,211 @@
+2026-06-16 17:44:27:323 [Appium] Welcome to Appium v3.5.0
+2026-06-16 17:44:27:327 [Appium] The autodetected Appium home path: /home/runner/.appium
+2026-06-16 17:44:27:328 [Appium] Attempting to load driver uiautomator2...
+2026-06-16 17:44:27:330 [Appium] Requiring driver at /home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/index.js
+2026-06-16 17:44:27:888 [Appium] AndroidUiautomator2Driver has been successfully loaded in 0.559s
+2026-06-16 17:44:27:914 [Appium] Appium REST http interface listener started on http://0.0.0.0:4723
+2026-06-16 17:44:27:916 [Appium] You can provide the following URLs in your client code to connect to this server:
+	http://127.0.0.1:4723/ (only accessible from the same host)
+	http://10.1.0.27:4723/
+2026-06-16 17:44:27:916 [Appium] Available drivers:
+2026-06-16 17:44:27:917 [Appium]   - uiautomator2@7.6.1 (automationName 'UiAutomator2')
+2026-06-16 17:44:27:919 [Appium] No plugins have been installed. Use the "appium plugin" command to install the one(s) you want to use.
+2026-06-16 17:44:47:070 [HTTP] Request idempotency key: aea42c52-83fa-44f4-9987-44fb57b720fe
+2026-06-16 17:44:47:081 [HTTP] --> POST /session {"capabilities":{"firstMatch":[{}],"alwaysMatch":{"platformName":"Android","appium:automationName":"UiAutomator2","appium:deviceName":"Android Emulator","appium:appPackage":"com.example.smartcivicgovernance","appium:appActivity":"com.example.smartcivicgovernance.SplashActivity","appium:noReset":true}}}
+2026-06-16 17:44:47:083 [AppiumDriver@118e] Calling AppiumDriver.createSession() with args: [{"firstMatch":[{}],"alwaysMatch":{"platformName":"Android","appium:automationName":"UiAutomator2","appium:deviceName":"Android Emulator","appium:appPackage":"com.example.smartcivicgovernance","appium:appActivity":"com.example.smartcivicgovernance.SplashActivity","appium:noReset":true}},{"firstMatch":[{}],"alwaysMatch":{"platformName":"Android","appium:automationName":"UiAutomator2","appium:deviceName":"Android Emulator","appium:appPackage":"com.example.smartcivicgovernance","appium:appActivity":"com.example.smartcivicgovernance.SplashActivity","appium:noReset":true}},{"firstMatch":[{}],"alwaysMatch":{"platformName":"Android","appium:automationName":"UiAutomator2","appium:deviceName":"Android Emulator","appium:appPackage":"com.example.smartcivicgovernance","appium:appActivity":"com.example.smartcivicgovernance.SplashActivity","appium:noReset":true}}]
+2026-06-16 17:44:47:084 [AppiumDriver@118e] Event 'newSessionRequested' logged at 1781631887084 (17:44:47 GMT+0000 (Coordinated Universal Time))
+2026-06-16 17:44:47:088 [Appium] Attempting to find matching driver for automationName 'UiAutomator2' and platformName 'Android'
+2026-06-16 17:44:47:088 [Appium] The 'uiautomator2' driver was installed and matched caps.
+2026-06-16 17:44:47:088 [Appium] Will require it at /home/runner/.appium/node_modules/appium-uiautomator2-driver
+2026-06-16 17:44:47:091 [Appium] Requiring driver at /home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/index.js
+2026-06-16 17:44:47:092 [AppiumDriver@118e] Appium v3.5.0 creating new AndroidUiautomator2Driver (v7.6.1) session
+2026-06-16 17:44:47:092 [AppiumDriver@118e] Checking BaseDriver versions for Appium and AndroidUiautomator2Driver
+2026-06-16 17:44:47:092 [AppiumDriver@118e] Appium's BaseDriver version is 10.6.0
+2026-06-16 17:44:47:092 [AppiumDriver@118e] AndroidUiautomator2Driver's BaseDriver version is 10.6.0
+2026-06-16 17:44:47:098 [38;5;-61m[AndroidUiautomator2Driver@dc9d] 
+2026-06-16 17:44:47:100 [38;5;-61m[AndroidUiautomator2Driver@dc9d] Creating session with W3C capabilities: {
+  "alwaysMatch": {
+    "platformName": "Android",
+    "appium:automationName": "UiAutomator2",
+    "appium:deviceName": "Android Emulator",
+    "appium:appPackage": "com.example.smartcivicgovernance",
+    "appium:appActivity": "com.example.smartcivicgovernance.SplashActivity",
+    "appium:noReset": true
+  },
+  "firstMatch": [
+    {}
+  ]
+}
+2026-06-16 17:44:47:105 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Session created with session id: e57128de-d0d8-41ba-98fa-6a57d8433f3b
+2026-06-16 17:44:47:117 [e57128de][ADB] Found 6 'build-tools' folders under '/usr/local/lib/android/sdk' (newest first):
+2026-06-16 17:44:47:117 [e57128de][ADB]     /usr/local/lib/android/sdk/build-tools/37.0.0
+2026-06-16 17:44:47:118 [e57128de][ADB]     /usr/local/lib/android/sdk/build-tools/36.1.0
+2026-06-16 17:44:47:118 [e57128de][ADB]     /usr/local/lib/android/sdk/build-tools/36.0.0
+2026-06-16 17:44:47:118 [e57128de][ADB]     /usr/local/lib/android/sdk/build-tools/35.0.1
+2026-06-16 17:44:47:118 [e57128de][ADB]     /usr/local/lib/android/sdk/build-tools/35.0.0
+2026-06-16 17:44:47:118 [e57128de][ADB]     /usr/local/lib/android/sdk/build-tools/34.0.0
+2026-06-16 17:44:47:119 [e57128de][ADB] Using 'adb' from '/usr/local/lib/android/sdk/platform-tools/adb'
+2026-06-16 17:44:47:119 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 start-server'
+2026-06-16 17:44:47:127 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Retrieving device list
+2026-06-16 17:44:47:127 [e57128de][ADB] Trying to find connected Android devices
+2026-06-16 17:44:47:128 [e57128de][ADB] Getting connected devices
+2026-06-16 17:44:47:136 [e57128de][ADB] Connected devices: [{"udid":"emulator-5554","state":"device"}]
+2026-06-16 17:44:47:136 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Using device: emulator-5554
+2026-06-16 17:44:47:146 [e57128de][BaseDriver] Initialized new IPC object with max object size of 1048576 bytes and max topics of 1000
+2026-06-16 17:44:47:146 [e57128de][BaseDriver] Subscribing dc9de81b-f4b9-4373-bc65-dbb068a3177c to topic 'uiautomator2:sessionUdidClaimed'
+2026-06-16 17:44:47:147 [e57128de][BaseDriver] Subscribing dc9de81b-f4b9-4373-bc65-dbb068a3177c to topic 'uiautomator2:sessionUdidContended'
+2026-06-16 17:44:47:147 [e57128de][BaseDriver] Subscribing dc9de81b-f4b9-4373-bc65-dbb068a3177c to topic 'uiautomator2:sessionUdidReleased'
+2026-06-16 17:44:47:148 [e57128de][BaseDriver] dc9de81b-f4b9-4373-bc65-dbb068a3177c is publishing a message to topic uiautomator2:sessionUdidClaimed
+2026-06-16 17:44:47:160 [e57128de][BaseDriver] Unsubscribing dc9de81b-f4b9-4373-bc65-dbb068a3177c from topic 'uiautomator2:sessionUdidContended'
+2026-06-16 17:44:47:161 [e57128de][BaseDriver] Unsubscribing dc9de81b-f4b9-4373-bc65-dbb068a3177c from topic 'uiautomator2:sessionUdidReleased'
+2026-06-16 17:44:47:162 [e57128de][ADB] Using 'adb' from '/usr/local/lib/android/sdk/platform-tools/adb'
+2026-06-16 17:44:47:162 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 start-server'
+2026-06-16 17:44:47:169 [e57128de][ADB] Setting device id to emulator-5554
+2026-06-16 17:44:47:169 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Starting 'com.example.smartcivicgovernance' directly on the device
+2026-06-16 17:44:47:170 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell getprop ro.build.version.sdk'
+2026-06-16 17:44:47:209 [e57128de][ADB] Current device property 'ro.build.version.sdk': 34
+2026-06-16 17:44:47:210 [e57128de][ADB] Getting device platform version
+2026-06-16 17:44:47:210 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell getprop ro.build.version.release'
+2026-06-16 17:44:47:249 [e57128de][ADB] Current device property 'ro.build.version.release': 14
+2026-06-16 17:44:47:249 [e57128de][ADB] Device API level: 34
+2026-06-16 17:44:47:249 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Relaxing hidden api policy
+2026-06-16 17:44:47:250 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell 'settings put global hidden_api_policy_pre_p_apps 1;settings put global hidden_api_policy_p_apps 1;settings put global hidden_api_policy 1''
+2026-06-16 17:44:47:255 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 wait-for-device'
+2026-06-16 17:44:47:261 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell echo ping'
+2026-06-16 17:44:47:280 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Pushing settings apk to the device...
+2026-06-16 17:44:47:281 [e57128de][ADB] Getting package info for 'io.appium.settings'
+2026-06-16 17:44:47:281 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys package io.appium.settings'
+2026-06-16 17:44:47:324 [e57128de][ADB] App '/home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/io.appium.settings/apks/settings_apk-debug.apk' is not installed
+2026-06-16 17:44:47:324 [e57128de][ADB] Installing '/home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/io.appium.settings/apks/settings_apk-debug.apk'
+2026-06-16 17:44:47:325 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 install -g /home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/io.appium.settings/apks/settings_apk-debug.apk'
+2026-06-16 17:44:47:775 [e57128de][ADB] The installation of 'settings_apk-debug.apk' took 450ms
+2026-06-16 17:44:47:776 [e57128de][ADB] Install command stdout: Performing Streamed Install
+Success
+2026-06-16 17:44:47:776 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys activity services io.appium.settings'
+2026-06-16 17:44:47:859 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell cmd notification allow_listener io.appium.settings/.NLService'
+2026-06-16 17:44:47:867 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell appops set io.appium.settings PROJECT_MEDIA allow'
+2026-06-16 17:44:48:016 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys activity services io.appium.settings'
+2026-06-16 17:44:48:075 [e57128de][SettingsApp] Starting Appium Settings app
+2026-06-16 17:44:48:079 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell am start-activity -n io.appium.settings/.Settings -a android.intent.action.MAIN -c android.intent.category.LAUNCHER'
+2026-06-16 17:44:48:218 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys activity services io.appium.settings'
+2026-06-16 17:44:48:821 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys activity services io.appium.settings'
+2026-06-16 17:44:48:955 [e57128de][Logcat] Starting logs capture with command: /usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 logcat -v threadtime
+2026-06-16 17:44:49:020 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Forwarding UiAutomator2 Server port 6790 to local port 8200
+2026-06-16 17:44:49:021 [e57128de][ADB] Forwarding system: 8200 to device: 6790
+2026-06-16 17:44:49:021 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 forward tcp:8200 tcp:6790'
+2026-06-16 17:44:49:028 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] UIA2Proxy options: {"scheme":"http","server":"127.0.0.1","port":8200,"base":"","reqBasePath":"","sessionId":null,"timeout":240000,"keepAlive":true}
+2026-06-16 17:44:49:029 [e57128de][ADB] Getting package info for 'io.appium.uiautomator2.server'
+2026-06-16 17:44:49:029 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys package io.appium.uiautomator2.server'
+2026-06-16 17:44:49:033 [e57128de][ADB] Getting install status for io.appium.uiautomator2.server.test
+2026-06-16 17:44:49:033 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] No app capability. Assuming it is already on the device
+2026-06-16 17:44:49:033 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell cmd package list packages --show-versioncode'
+2026-06-16 17:44:49:202 [e57128de][ADB] App '/home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-uiautomator2-server/apks/appium-uiautomator2-server-v10.2.1.apk' is not installed
+2026-06-16 17:44:49:345 [e57128de][ADB] 'io.appium.uiautomator2.server.test' is not installed
+2026-06-16 17:44:49:345 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Server packages status: [{"installState":"notInstalled","appPath":"/home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-uiautomator2-server/apks/appium-uiautomator2-server-v10.2.1.apk","appId":"io.appium.uiautomator2.server"},{"installState":"notInstalled","appPath":"/home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-uiautomator2-server/apks/appium-uiautomator2-server-debug-androidTest.apk","appId":"io.appium.uiautomator2.server.test"}]
+2026-06-16 17:44:49:345 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Server packages are going to be (re)installed
+2026-06-16 17:44:49:346 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 version'
+2026-06-16 17:44:49:359 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 features'
+2026-06-16 17:44:49:364 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 install -r --no-incremental /home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-uiautomator2-server/apks/appium-uiautomator2-server-v10.2.1.apk'
+2026-06-16 17:44:49:367 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 install -r --no-incremental /home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-uiautomator2-server/apks/appium-uiautomator2-server-debug-androidTest.apk'
+2026-06-16 17:44:51:017 [e57128de][ADB] The installation of 'appium-uiautomator2-server-debug-androidTest.apk' took 1648ms
+2026-06-16 17:44:51:018 [e57128de][ADB] Install command stdout: Performing Streamed Install
+Success
+2026-06-16 17:44:51:768 [e57128de][ADB] The installation of 'appium-uiautomator2-server-v10.2.1.apk' took 2402ms
+2026-06-16 17:44:51:768 [e57128de][ADB] Install command stdout: Performing Streamed Install
+Success
+2026-06-16 17:44:51:769 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Waiting up to 30000ms for services to be available
+2026-06-16 17:44:51:769 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell pm list instrumentation'
+2026-06-16 17:44:51:843 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Instrumentation target 'io.appium.uiautomator2.server.test/androidx.test.runner.AndroidJUnitRunner' is available
+2026-06-16 17:44:51:846 [e57128de][ADB] Adding packages ["io.appium.settings","io.appium.uiautomator2.server","io.appium.uiautomator2.server.test"] to Doze whitelist
+2026-06-16 17:44:51:846 [e57128de][ADB] Got the following command chunks to execute: [["dumpsys","deviceidle","whitelist","+io.appium.settings",";","dumpsys","deviceidle","whitelist","+io.appium.uiautomator2.server",";","dumpsys","deviceidle","whitelist","+io.appium.uiautomator2.server.test",";"]]
+2026-06-16 17:44:51:846 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys deviceidle whitelist +io.appium.settings ; dumpsys deviceidle whitelist +io.appium.uiautomator2.server ; dumpsys deviceidle whitelist +io.appium.uiautomator2.server.test ;'
+2026-06-16 17:44:51:986 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Performing shallow cleanup of automation leftovers
+2026-06-16 17:44:52:005 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] No obsolete sessions have been detected (socket hang up)
+2026-06-16 17:44:52:005 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell am force-stop io.appium.uiautomator2.server'
+2026-06-16 17:44:52:011 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell am force-stop io.appium.uiautomator2.server.test'
+2026-06-16 17:44:52:105 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Starting UIAutomator2 server 10.2.1
+2026-06-16 17:44:52:106 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Using UIAutomator2 server from '/home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-uiautomator2-server/apks/appium-uiautomator2-server-v10.2.1.apk' and test from '/home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-uiautomator2-server/apks/appium-uiautomator2-server-debug-androidTest.apk'
+2026-06-16 17:44:52:106 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Waiting up to 30000ms for UiAutomator2 to be online...
+2026-06-16 17:44:52:106 [e57128de][ADB] Creating ADB subprocess with args: ["-P","5037","-s","emulator-5554","shell","am","instrument","-w","-e","disableAnalytics","true","io.appium.uiautomator2.server.test/androidx.test.runner.AndroidJUnitRunner"]
+2026-06-16 17:44:52:116 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Matched '/status' to command name 'getStatus'
+2026-06-16 17:44:52:118 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [GET /status] to [GET http://127.0.0.1:8200/status] with no body
+2026-06-16 17:44:52:129 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] socket hang up
+2026-06-16 17:44:53:131 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Matched '/status' to command name 'getStatus'
+2026-06-16 17:44:53:131 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [GET /status] to [GET http://127.0.0.1:8200/status] with no body
+2026-06-16 17:44:53:136 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] socket hang up
+2026-06-16 17:44:54:137 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Matched '/status' to command name 'getStatus'
+2026-06-16 17:44:54:137 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [GET /status] to [GET http://127.0.0.1:8200/status] with no body
+2026-06-16 17:44:54:142 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] socket hang up
+2026-06-16 17:44:54:414 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] 
+2026-06-16 17:44:55:143 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Matched '/status' to command name 'getStatus'
+2026-06-16 17:44:55:143 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [GET /status] to [GET http://127.0.0.1:8200/status] with no body
+2026-06-16 17:44:55:147 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] socket hang up
+2026-06-16 17:44:55:742 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] s_glBindAttribLocation: bind attrib 0 name position
+2026-06-16 17:44:55:743 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] s_glBindAttribLocation: bind attrib 1 name color
+2026-06-16 17:44:55:743 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] s_glBindAttribLocation: bind attrib 2 name localCoord
+2026-06-16 17:44:56:148 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Matched '/status' to command name 'getStatus'
+2026-06-16 17:44:56:148 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [GET /status] to [GET http://127.0.0.1:8200/status] with no body
+2026-06-16 17:44:56:457 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Got response with status 200: {"sessionId":"None","value":{"build":{"version":"10.2.1","versionCode":260},"message":"UiAutomator2 Server is ready to accept commands","ready":true}}
+2026-06-16 17:44:56:458 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] The initialization of the instrumentation process took 4352ms
+2026-06-16 17:44:56:458 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Matched '/session' to command name 'createSession'
+2026-06-16 17:44:56:458 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [POST /session] to [POST http://127.0.0.1:8200/session] with body: {"capabilities":{"firstMatch":[{"platformName":"Android","automationName":"UiAutomator2","deviceName":"emulator-5554","appPackage":"com.example.smartcivicgovernance","appActivity":"com.example.smartcivicgovernance.SplashActivity","noReset":true,"platform":"LINUX","webStorageEnabled":false,"takesScreenshot":true,"javascriptEnabled":true,"databaseEnabled":false,"networkConnectionEnabled":true,"locationContextEnabled":false,"warnings":{},"desired":{"platformName":"Android","automationName":"UiAutomator2","deviceName":"Android Emulator","appPackage":"com.example.smartcivicgovernance","appActivity":"com.example.smartcivicgovernance.SplashActivity","noReset":true},"deviceUDID":"emulator-5554"}],"alwaysMatch":{}}}
+2026-06-16 17:44:56:483 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Got response with status 200: {"sessionId":"a21a7ebc-3f33-40be-8f55-328928320eb3","value":{"capabilities":{"firstMatch":[{"platformName":"Android","automationName":"UiAutomator2","deviceName":"emulator-5554","appPackage":"com.example.smartcivicgovernance","appActivity":"com.example.smartcivicgovernance.SplashActivity","noReset":true,"platform":"LINUX","webStorageEnabled":false,"takesScreenshot":true,"javascriptEnabled":true,"databaseEnabled":false,"networkConnectionEnabled":true,"locationContextEnabled":false,"warnings":{},"desired":{"platformName":"Android","automationName":"UiAutomator2","deviceName":"Android Emulator","appPackage":"com.example.smartcivicgovernance","appActivity":"com.example.smartcivicgovernance.SplashActivity","noReset":true},"deviceUDID":"emulator-5554"}],"alwaysMatch":{}},"sessionId":"a21a7ebc-3f33-40be-8f55-328928320eb3"}}
+2026-06-16 17:44:56:484 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Determined the downstream protocol as 'W3C'
+2026-06-16 17:44:56:500 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [GET /appium/device/pixel_ratio] to [GET http://127.0.0.1:8200/session/a21a7ebc-3f33-40be-8f55-328928320eb3/appium/device/pixel_ratio] with no body
+2026-06-16 17:44:56:506 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [GET /appium/device/system_bars] to [GET http://127.0.0.1:8200/session/a21a7ebc-3f33-40be-8f55-328928320eb3/appium/device/system_bars] with no body
+2026-06-16 17:44:56:510 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [GET /window/current/size] to [GET http://127.0.0.1:8200/session/a21a7ebc-3f33-40be-8f55-328928320eb3/window/current/size] with no body
+2026-06-16 17:44:56:516 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [GET /appium/device/info] to [GET http://127.0.0.1:8200/session/a21a7ebc-3f33-40be-8f55-328928320eb3/appium/device/info] with no body
+2026-06-16 17:44:56:518 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys window'
+2026-06-16 17:44:56:523 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys power'
+2026-06-16 17:44:56:568 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Got response with status 200: {"sessionId":"a21a7ebc-3f33-40be-8f55-328928320eb3","value":{"height":640,"width":320}}
+2026-06-16 17:44:56:569 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Got response with status 200: {"sessionId":"a21a7ebc-3f33-40be-8f55-328928320eb3","value":{"statusBar":24}}
+2026-06-16 17:44:56:572 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Got response with status 200: {"sessionId":"a21a7ebc-3f33-40be-8f55-328928320eb3","value":1}
+2026-06-16 17:44:56:632 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Got response with status 200: {"sessionId":"a21a7ebc-3f33-40be-8f55-328928320eb3","value":{"androidId":"e111f4978bd9f76a","apiVersion":"34","bluetooth":{"state":"ON"},"brand":"google","carrierName":"T-Mobile","displayDensity":160,"locale":"en_US","manufacturer":"Google","model":"sdk_gphone64_x86_64","networks":[{"capabilities":{"SSID":null,"linkDownBandwidthKbps":30000,"linkUpstreamBandwidthKbps":12000,"networkCapabilities":"NET_CAPABILITY_NOT_METERED,NET_CAPABILITY_INTERNET,NET_CAPABILITY_NOT_RESTRICTED,NET_CAPABILITY_TRUSTED,NET_CAPABILITY_NOT_VPN,NET_CAPABILITY_VALIDATED,NET_CAPABILITY_NOT_ROAMING,NET_CAPABILITY_FOREGROUND,NET_CAPABILITY_NOT_CONGESTED,NET_CAPABILITY_NOT_SUSPENDED","signalStrength":-50,"transportTypes":"TRANSPORT_WIFI"},"detailedState":"CONNECTED","extraInfo":"","isAvailable":true,"isConnected":true,"isFailover":false,"isRoaming":false,"state":"CONNECTED","subtype":-1,"subtypeName":"","type":1,"typeName":"WIFI"},{"capabilities":{"SSID":null,"linkDownBandwidthKbps":4300,"linkUpstreamBandwidthKbps":1800,"networkCapabilit…
+2026-06-16 17:44:56:818 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Screen already unlocked, doing nothing
+2026-06-16 17:44:56:819 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Starting 'com.example.smartcivicgovernance/com.example.smartcivicgovernance.SplashActivityand waiting for 'com.example.smartcivicgovernance/com.example.smartcivicgovernance.SplashActivity'
+2026-06-16 17:44:56:820 [e57128de][ADB] Getting IDs of all 'com.example.smartcivicgovernance' processes
+2026-06-16 17:44:56:820 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell ps --help'
+2026-06-16 17:44:56:875 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell ps -A'
+2026-06-16 17:44:57:158 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell am start-activity -W -n com.example.smartcivicgovernance/com.example.smartcivicgovernance.SplashActivity -S -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x10200000'
+2026-06-16 17:44:57:475 [e57128de][ADB] We tried to start an activity that doesn't exist, retrying with '.com.example.smartcivicgovernance.SplashActivity' activity name
+2026-06-16 17:44:57:476 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell am start-activity -W -n com.example.smartcivicgovernance/.com.example.smartcivicgovernance.SplashActivity -S -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x10200000'
+2026-06-16 17:44:57:789 [e57128de][BaseDriver] Unsubscribing dc9de81b-f4b9-4373-bc65-dbb068a3177c from topic 'uiautomator2:sessionUdidClaimed'
+2026-06-16 17:44:57:790 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Deleting UiAutomator2 session
+2026-06-16 17:44:57:790 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Deleting UiAutomator2 server session
+2026-06-16 17:44:57:790 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Proxying [DELETE /] to [DELETE http://127.0.0.1:8200/session/a21a7ebc-3f33-40be-8f55-328928320eb3] with no body
+2026-06-16 17:44:57:808 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Got response with status 200: {"sessionId":"a21a7ebc-3f33-40be-8f55-328928320eb3","value":null}
+2026-06-16 17:44:57:809 [e57128de][ADB] Getting IDs of all 'io.appium.uiautomator2.server' processes
+2026-06-16 17:44:57:809 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell ps -A'
+2026-06-16 17:44:57:969 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] io.appium.uiautomator2.server.test.AppiumUiAutomator2Server:.
+2026-06-16 17:44:57:970 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] 
+2026-06-16 17:44:57:970 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] Time: 3.43
+2026-06-16 17:44:57:970 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] 
+2026-06-16 17:44:57:970 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] OK (1 test)
+2026-06-16 17:44:57:970 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] 
+2026-06-16 17:44:57:971 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] 
+2026-06-16 17:44:58:027 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] [Instrumentation] The process has exited with code 0, signal null
+2026-06-16 17:44:58:164 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell am force-stop io.appium.uiautomator2.server'
+2026-06-16 17:44:58:169 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell am force-stop io.appium.uiautomator2.server.test'
+2026-06-16 17:44:58:278 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell dumpsys activity services io.appium.settings/.recorder.RecorderService'
+2026-06-16 17:44:58:324 [e57128de][ADB] Removing forwarded port socket connection: 8200 
+2026-06-16 17:44:58:324 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 forward --remove tcp:8200'
+2026-06-16 17:44:58:334 [e57128de][38;5;-61m[AndroidUiautomator2Driver@dc9d] Restoring hidden api policy to the device default configuration
+2026-06-16 17:44:58:334 [e57128de][ADB] Running '/usr/local/lib/android/sdk/platform-tools/adb -P 5037 -s emulator-5554 shell 'settings delete global hidden_api_policy_pre_p_apps;settings delete global hidden_api_policy_p_apps;settings delete global hidden_api_policy''
+2026-06-16 17:44:58:521 [e57128de][Logcat] Stopping logcat capture
+2026-06-16 17:44:58:523 [e57128de][AppiumDriver@118e] Event 'newSessionStarted' logged at 1781631898523 (17:44:58 GMT+0000 (Coordinated Universal Time))
+2026-06-16 17:44:58:524 [e57128de][AppiumDriver@118e] Encountered internal error running command: Error: Cannot start the 'com.example.smartcivicgovernance' application. Consider checking the driver's troubleshooting documentation. Original error: Cannot start the 'com.example.smartcivicgovernance' application. Consider checking the driver's troubleshooting documentation. Original error: Activity name '.com.example.smartcivicgovernance.SplashActivity' used to start the app doesn't exist or cannot be launched! Make sure it exists and is a launchable activity
+    at ADB.startApp (/home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-adb/build/lib/tools/app-commands.js:612:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AndroidUiautomator2Driver.ensureAppStarts (/home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/commands/aut.js:106:5)
+    at async AndroidUiautomator2Driver.performPostExecSetup [as performSessionPostExecSetup] (/home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/uiautomator2-server/session.js:202:9)
+    at async AndroidUiautomator2Driver.startSession [as startUiAutomator2Session] (/home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/uiautomator2-server/session.js:260:5)
+    at async AndroidUiautomator2Driver.createSession (/home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/driver.js:301:28)
+    at async AppiumDriver.createSession (/usr/local/lib/node_modules/appium/build/lib/appium.js:274:44)
+    at async runCommandPromise (/usr/local/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/basedriver/driver.js:117:24)
+    at async AppiumDriver.executeCommand (/usr/local/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/basedriver/driver.js:158:15)
+    at async defaultBehavior (/usr/local/lib/node_modules/appium/build/lib/appium.js:582:24)
+    at async AppiumDriver.executeWrappedCommand (/usr/local/lib/node_modules/appium/build/lib/appium.js:694:22)
+    at async AppiumDriver.executeCommand (/usr/local/lib/node_modules/appium/build/lib/appium.js:598:21)
+    at async asyncHandler (/usr/local/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/protocol/protocol.js:394:25)
+2026-06-16 17:44:58:532 [e57128de][HTTP] <-- POST /session 500 11446 ms - 3607
+2026-06-16 17:45:07:205 [Appium] Received SIGTERM - shutting down
