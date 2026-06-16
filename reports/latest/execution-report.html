@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Execution Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #f8fafc;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p {
+            margin: 0.25rem 0 0 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .status-badge {
+            background-color: #10b981;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 15px #10b98150;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .stat-card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .stat-card p {
+            margin: 0 0 0.25rem 0;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .stat-card h2 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.25);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+        }
+        .glass-card h3 {
+            margin: 0 0 1.25rem 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            background-color: rgba(255,255,255,0.03);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        td {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: #cbd5e1;
+        }
+        tr:hover td {
+            background-color: rgba(255,255,255,0.01);
+            color: white;
+        }
+        .step-name {
+            font-weight: 600;
+        }
+        .badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-pass {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+        .badge-fail {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>E2E Test Execution Report</h1>
+                <p>Suite: Smart Civic Governance Portal | Date: 2026-06-16 14:20:36</p>
+            </div>
+            <div class="status-badge">PASSED</div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <p>Total Steps</p>
+                <h2>7</h2>
+            </div>
+            <div class="stat-card" style="color: #10b981;">
+                <p>Passed Steps</p>
+                <h2>7</h2>
+            </div>
+            <div class="stat-card" style="color: #ef4444;">
+                <p>Failed Steps</p>
+                <h2>0</h2>
+            </div>
+            <div class="stat-card" style="color: #3b82f6;">
+                <p>Pass Percentage</p>
+                <h2>100.0%</h2>
+            </div>
+        </div>
+        
+        <div class="glass-card">
+            <h3>Detailed Step Execution Log</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Step</th>
+                        <th>Step Description</th>
+                        <th style="width: 100px;">Status</th>
+                        <th>Detailed Log Output / Failure Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td>1</td>
+                <td class="step-name">1. Launch Application and Splash Screen</td>
+                <td><span class="badge badge-pass">Passed</span></td>
+                <td>Application launched and splash screen completed successfully</td>
+            </tr>
+            
+            <tr>
+                <td>2</td>
+                <td class="step-name">2. Authenticate User Credentials</td>
+                <td><span class="badge badge-pass">Passed</span></td>
+                <td>User authenticated as Citizen successfully</td>
+            </tr>
+            
+            <tr>
+                <td>3</td>
+                <td class="step-name">3. Citizen Reports Civic Complaint</td>
+                <td><span class="badge badge-pass">Passed</span></td>
+                <td>Complaint reported and verified on Citizen list</td>
+            </tr>
+            
+            <tr>
+                <td>4</td>
+                <td class="step-name">4. Worker Accepts Reported Task</td>
+                <td><span class="badge badge-pass">Passed</span></td>
+                <td>Worker accepted task and assigned to active task board</td>
+            </tr>
+            
+            <tr>
+                <td>5</td>
+                <td class="step-name">5. Worker Uploads Resolution Proof</td>
+                <td><span class="badge badge-pass">Passed</span></td>
+                <td>Resolution proof uploaded and status transitioned to Verification Pending</td>
+            </tr>
+            
+            <tr>
+                <td>6</td>
+                <td class="step-name">6. Admin Reviews and Approves Work</td>
+                <td><span class="badge badge-pass">Passed</span></td>
+                <td>Admin verified proof. Worker points updated, complaint marked Resolved</td>
+            </tr>
+            
+            <tr>
+                <td>7</td>
+                <td class="step-name">7. Verify Leaderboard & Ranks</td>
+                <td><span class="badge badge-pass">Passed</span></td>
+                <td>Leaderboard ranks recalculated and points validated on Android dashboard</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
