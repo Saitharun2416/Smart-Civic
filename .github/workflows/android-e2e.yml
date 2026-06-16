@@ -61,7 +61,6 @@ jobs:
           script: |
             # Start Appium server in background
             appium --log Test_Results/Logs/appium_server.log &
-            APPIUM_PID=$!
             # Wait for Appium to spin up
             sleep 10
             
@@ -70,7 +69,7 @@ jobs:
             python -m unittest tests/appium/test_app_flow.py
             
             # Kill Appium server to prevent the step from hanging
-            kill $APPIUM_PID || true
+            pkill -f appium || true
 
       - name: Upload Test Results Artifacts
         if: always()
