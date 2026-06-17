@@ -50,6 +50,13 @@ class TestSmartCivicAppE2E(unittest.TestCase):
         
         logger.info(f"Connecting to Appium Server at {appium_server_url}...")
         
+        # Check if we should force a mock simulation run (useful for CI/CD environments without Firebase setup)
+        if os.environ.get("FORCE_MOCK_E2E") == "true":
+            logger.info("Forcing mock simulation mode via environment variable FORCE_MOCK_E2E.")
+            self.driver = None
+            self.is_mock_run = True
+            return
+
         # Since Appium execution in GitHub Actions runs inside Android emulator asynchronously, 
         # we wrap connection in a try-catch for local fallback or mock run if connection fails.
         try:
@@ -128,12 +135,12 @@ class TestSmartCivicAppE2E(unittest.TestCase):
                 # Fill complaint details
                 title_field = self.driver.find_element(By.ID, "com.example.smartcivicgovernance:id/etTitle")
                 desc_field = self.driver.find_element(By.ID, "com.example.smartcivicgovernance:id/etDescription")
-                btn_location = self.driver.find_element(By.ID, "com.example.smartcivicgovernance:id/btnPickLocation")
+                btn_location = self.driver.find_element(By.ID, "com.example.smartcivicgovernance:id/btnCurrentLoc")
                 btn_submit = self.driver.find_element(By.ID, "com.example.smartcivicgovernance:id/btnSubmit")
                 
                 title_field.send_keys("Trash Overflow Appium")
                 desc_field.send_keys("Large volume of trash not cleared at Sector 1 park entrance.")
-                btn_location.click() # triggers map picker
+                btn_location.click() # triggers current location lookup
                 time.sleep(1)
                 
                 self.take_screenshot("app_03_report_form.png")
@@ -166,7 +173,7 @@ class TestSmartCivicAppE2E(unittest.TestCase):
             logger.info(f"Starting step: {step_name}")
             if not self.is_mock_run:
                 # Find task in list and click Submit Proof
-                btn_resolve = self.wait.until(EC.element_to_be_clickable((By.ID, "com.example.smartcivicgovernance:id/btnResolveTask")))
+                btn_resolve = self.wait.until(EC.element_to_be_clickable((By.ID, "com.example.smartcivicgovernance:id/btnAction")))
                 btn_resolve.click()
                 time.sleep(1)
                 
@@ -208,7 +215,7 @@ class TestSmartCivicAppE2E(unittest.TestCase):
             logger.info(f"Starting step: {step_name}")
             if not self.is_mock_run:
                 # Tap Leaderboard tab on dashboard
-                btn_leaderboard = self.wait.until(EC.element_to_be_clickable((By.ID, "com.example.smartcivicgovernance:id/btnLeaderboard")))
+                btn_leaderboard = self.wait.until(EC.element_to_be_clickable((By.ID, "com.example.smartcivicgovernance:id/citizenLeaderboardFragment")))
                 btn_leaderboard.click()
                 time.sleep(1)
                 self.take_screenshot("app_07_leaderboard.png")
