@@ -9,6 +9,8 @@ import com.example.smartcivicgovernance.data.repository.ComplaintRepository
 import com.example.smartcivicgovernance.data.repository.WorkerRepository
 import com.example.smartcivicgovernance.data.remote.FirebaseHelper
 
+import com.google.firebase.firestore.ListenerRegistration
+
 class CitizenViewModel : ViewModel() {
 
     private val complaintRepo = ComplaintRepository()
@@ -29,17 +31,31 @@ class CitizenViewModel : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
 
+    private var complaintsListener: ListenerRegistration? = null
+
     fun loadCitizenComplaints() {
         val uid = FirebaseHelper.getCurrentUid() ?: return
         _loading.value = true
         _error.value = null
-        complaintRepo.fetchCitizenComplaints(uid) { result ->
-            _loading.value = false
-            result.fold(
-                onSuccess = { list -> _complaints.value = list },
-                onFailure = { e -> _error.value = e.message }
-            )
-        }
+        complaintsListener?.remove()
+        complaintsListener = FirebaseHelper.db.collection("complaints")
+            .whereEqualTo("citizenId", uid)
+            .addSnapshotListener { snapshot, e ->
+                _loading.value = false
+                if (e != null) {
+                    _error.value = e.message
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    val list = snapshot.toObjects(Complaint::class.java)
+                    _complaints.value = list
+                }
+            }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        complaintsListener?.remove()
     }
 
     fun loadLeaderboard() {

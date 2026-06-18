@@ -114,11 +114,7 @@ class RegisterFragment : Fragment() {
                 FirebaseHelper.checkUserStatus { role, disabled ->
                     if (role != null) {
                         if (disabled) {
-                            val msg = if (role == "worker") {
-                                "Registration succeeded! Your account is pending admin approval. You can access the app once approved."
-                            } else {
-                                "Your account is disabled. Please contact support."
-                            }
+                            val msg = "Your account is disabled. Please contact support."
                             Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
                             FirebaseHelper.auth.signOut()
                             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)

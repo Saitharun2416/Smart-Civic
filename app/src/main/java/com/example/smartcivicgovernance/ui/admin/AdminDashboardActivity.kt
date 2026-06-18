@@ -43,7 +43,6 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 R.id.complaintsManagementFragment,
                 R.id.complaintVerificationFragment,
                 R.id.userManagementFragment,
-                R.id.workerApprovalFragment,
                 R.id.analyticsFragment,
                 R.id.duplicateDetectionFragment
             ),
@@ -75,7 +74,6 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
             R.id.complaintsManagementFragment -> navController.navigate(R.id.complaintsManagementFragment)
             R.id.complaintVerificationFragment -> navController.navigate(R.id.complaintVerificationFragment)
             R.id.userManagementFragment -> navController.navigate(R.id.userManagementFragment)
-            R.id.workerApprovalFragment -> navController.navigate(R.id.workerApprovalFragment)
             R.id.analyticsFragment -> navController.navigate(R.id.analyticsFragment)
             R.id.duplicateDetectionFragment -> navController.navigate(R.id.duplicateDetectionFragment)
             R.id.adminLogout -> {

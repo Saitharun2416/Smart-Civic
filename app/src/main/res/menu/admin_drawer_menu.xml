@@ -17,10 +17,7 @@
             android:id="@+id/userManagementFragment"
             android:icon="@drawable/ic_profile"
             android:title="User Management" />
-        <item
-            android:id="@+id/workerApprovalFragment"
-            android:icon="@drawable/ic_profile"
-            android:title="Worker Approval" />
+
         <item
             android:id="@+id/analyticsFragment"
             android:icon="@drawable/ic_stats"

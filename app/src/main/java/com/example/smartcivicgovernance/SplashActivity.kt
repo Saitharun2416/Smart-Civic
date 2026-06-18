@@ -30,11 +30,7 @@ class SplashActivity : AppCompatActivity() {
             FirebaseHelper.checkUserStatus { role, disabled ->
                 if (role != null) {
                     if (disabled) {
-                        val msg = if (role == "worker") {
-                            "Your registration is pending admin approval. You will be able to access the app once approved."
-                        } else {
-                            "Your account is disabled. Please contact support."
-                        }
+                        val msg = "Your account is disabled. Please contact support."
                         Toast.makeText(this@SplashActivity, msg, Toast.LENGTH_LONG).show()
                         FirebaseHelper.auth.signOut()
                         navigateToAuth()

@@ -30,7 +30,7 @@ class UserRepository {
                     val updatedUser = user.copy(
                         uid = uid,
                         createdAt = Timestamp.now(),
-                        disabled = (user.role == "worker")
+                        disabled = false
                     )
                     
                     var completed = false

@@ -10,6 +10,8 @@ import com.example.smartcivicgovernance.data.repository.ComplaintRepository
 import com.example.smartcivicgovernance.data.repository.WorkerRepository
 import com.example.smartcivicgovernance.data.remote.FirebaseHelper
 
+import com.google.firebase.firestore.ListenerRegistration
+
 class WorkerViewModel : ViewModel() {
 
     private val complaintRepo = ComplaintRepository()
@@ -33,31 +35,52 @@ class WorkerViewModel : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
 
+    private var availableTasksListener: ListenerRegistration? = null
+    private var activeTasksListener: ListenerRegistration? = null
+
     fun loadTasks() {
         val uid = FirebaseHelper.getCurrentUid() ?: return
         _loading.value = true
         _error.value = null
         
-        // Fetch available
-        complaintRepo.fetchAvailableComplaints { availableResult ->
-            availableResult.fold(
-                onSuccess = { avList ->
-                    _availableTasks.value = avList
-                    // Fetch active
-                    complaintRepo.fetchWorkerActiveComplaints(uid) { activeResult ->
-                        _loading.value = false
-                        activeResult.fold(
-                            onSuccess = { acList -> _activeTasks.value = acList },
-                            onFailure = { e -> _error.value = e.message }
-                        )
-                    }
-                },
-                onFailure = { e ->
-                    _loading.value = false
+        availableTasksListener?.remove()
+        availableTasksListener = FirebaseHelper.db.collection("complaints")
+            .whereEqualTo("status", "Pending")
+            .addSnapshotListener { snapshot, e ->
+                _loading.value = false
+                if (e != null) {
                     _error.value = e.message
+                    return@addSnapshotListener
                 }
-            )
-        }
+                if (snapshot != null) {
+                    val avList = snapshot.toObjects(Complaint::class.java).filter {
+                        it.workerId.isNullOrEmpty() || it.workerId == uid
+                    }
+                    _availableTasks.value = avList
+                }
+            }
+            
+        activeTasksListener?.remove()
+        activeTasksListener = FirebaseHelper.db.collection("complaints")
+            .whereEqualTo("status", "In Progress")
+            .whereEqualTo("workerId", uid)
+            .addSnapshotListener { snapshot, e ->
+                _loading.value = false
+                if (e != null) {
+                    _error.value = e.message
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    val acList = snapshot.toObjects(Complaint::class.java)
+                    _activeTasks.value = acList
+                }
+            }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        availableTasksListener?.remove()
+        activeTasksListener?.remove()
     }
 
     fun loadWorkerStats() {
