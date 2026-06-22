@@ -232,9 +232,17 @@ class TestSmartCivicAppE2E(unittest.TestCase):
             raise e
             
         finally:
+            # Cache results for unified reporting
+            logger.info("Caching Appium E2E test results...")
+            cache_dir = os.path.join(reporter.results_dir, "cache")
+            os.makedirs(cache_dir, exist_ok=True)
+            import json
+            with open(os.path.join(cache_dir, "mobile_results.json"), "w", encoding="utf-8") as f:
+                json.dump({"steps": steps_executed, "is_success": is_success}, f, indent=2)
+
             # Compile Appium E2E reports
             logger.info("Compiling Appium E2E test results...")
-            reporter.generate_reports(steps_executed, is_success)
+            reporter.generate_reports()
             logger.info("Appium reports successfully compiled.")
 
 
