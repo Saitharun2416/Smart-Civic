@@ -139,63 +139,26 @@
                 </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Map Picker Section -->
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Address Section -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilAddress"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Pinpoint Location"
-                android:textColor="@color/text_secondary_light"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:hint="Complaint Address / Location"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_map"
+                app:endIconContentDescription="Detect Current Location">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:layout_marginTop="8dp"
-                app:cardCornerRadius="12dp">
-
-                <FrameLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etAddress"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <fragment
-                        android:id="@+id/mapFragment"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <!-- Custom pointer pin over center of map -->
-                    <ImageView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="18dp"
-                        android:src="@drawable/ic_map"
-                        app:tint="@color/error" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCurrentLoc"
-                        style="@style/Widget.Material3.Button.IconButton"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="12dp"
-                        android:backgroundTint="@color/surface_light"
-                        android:contentDescription="Use Current Location"
-                        android:src="@drawable/ic_map"
-                        app:tint="@color/primary" />
-                </FrameLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/tvSelectedAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Selected Address: Locating..."
-                android:textColor="@color/text_secondary_light"
-                android:textSize="12sp" />
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary_light"
+                    android:textColorHint="@color/text_secondary_light"
+                    android:inputType="textPostalAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

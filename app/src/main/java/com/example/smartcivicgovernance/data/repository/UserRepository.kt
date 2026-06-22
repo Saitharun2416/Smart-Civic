@@ -1,6 +1,7 @@
 package com.example.smartcivicgovernance.data.repository
 
 import com.example.smartcivicgovernance.data.model.User
+import com.example.smartcivicgovernance.data.model.toUserSafe
 import com.example.smartcivicgovernance.data.remote.FirebaseHelper
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
@@ -250,7 +251,7 @@ class UserRepository {
         FirebaseHelper.getDocWithTimeout(db.collection("users").document(uid), 3000) { result ->
             result.fold(
                 onSuccess = { doc ->
-                    val user = doc.toObject(User::class.java)
+                    val user = doc.toUserSafe()
                     if (user != null) {
                         callback(Result.success(user))
                     } else {

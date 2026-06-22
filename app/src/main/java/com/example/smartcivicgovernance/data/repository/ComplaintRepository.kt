@@ -1,7 +1,7 @@
 package com.example.smartcivicgovernance.data.repository
 
 import android.net.Uri
-import com.example.smartcivicgovernance.data.model.Complaint
+import com.example.smartcivicgovernance.data.model.*
 import com.example.smartcivicgovernance.data.remote.FirebaseHelper
 import com.google.firebase.Timestamp
 import java.util.Calendar
@@ -128,7 +128,7 @@ class ComplaintRepository {
         FirebaseHelper.getQueryWithTimeout(query, 3000) { result ->
             result.fold(
                 onSuccess = { snapshot ->
-                    val complaints = snapshot.toObjects(Complaint::class.java)
+                    val complaints = snapshot.toComplaintsSafe()
                     callback(Result.success(complaints))
                 },
                 onFailure = { e ->
@@ -144,7 +144,7 @@ class ComplaintRepository {
         FirebaseHelper.getQueryWithTimeout(query, 3000) { result ->
             result.fold(
                 onSuccess = { snapshot ->
-                    val allComplaints = snapshot.toObjects(Complaint::class.java)
+                    val allComplaints = snapshot.toComplaintsSafe()
                     val filtered = allComplaints.filter {
                         it.workerId.isNullOrEmpty() || it.workerId == uid
                     }
@@ -164,7 +164,7 @@ class ComplaintRepository {
         FirebaseHelper.getQueryWithTimeout(query, 3000) { result ->
             result.fold(
                 onSuccess = { snapshot ->
-                    val complaints = snapshot.toObjects(Complaint::class.java)
+                    val complaints = snapshot.toComplaintsSafe()
                     callback(Result.success(complaints))
                 },
                 onFailure = { e ->
@@ -178,7 +178,7 @@ class ComplaintRepository {
         FirebaseHelper.getQueryWithTimeout(db.collection("complaints"), 3000) { result ->
             result.fold(
                 onSuccess = { snapshot ->
-                    val complaints = snapshot.toObjects(Complaint::class.java)
+                    val complaints = snapshot.toComplaintsSafe()
                     callback(Result.success(complaints))
                 },
                 onFailure = { e ->

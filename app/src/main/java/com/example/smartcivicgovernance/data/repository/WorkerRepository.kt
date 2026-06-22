@@ -1,6 +1,8 @@
 package com.example.smartcivicgovernance.data.repository
 
 import com.example.smartcivicgovernance.data.model.Worker
+import com.example.smartcivicgovernance.data.model.toWorkerSafe
+import com.example.smartcivicgovernance.data.model.toWorkersSafe
 import com.example.smartcivicgovernance.data.remote.FirebaseHelper
 
 class WorkerRepository {
@@ -11,7 +13,7 @@ class WorkerRepository {
         FirebaseHelper.getDocWithTimeout(db.collection("workers").document(workerId), 3000) { result ->
             result.fold(
                 onSuccess = { doc ->
-                    val worker = doc.toObject(Worker::class.java)
+                    val worker = doc.toWorkerSafe()
                     if (worker != null) {
                         callback(Result.success(worker))
                     } else {
@@ -31,7 +33,7 @@ class WorkerRepository {
         FirebaseHelper.getQueryWithTimeout(query, 3000) { result ->
             result.fold(
                 onSuccess = { snapshot ->
-                    val workers = snapshot.toObjects(Worker::class.java)
+                    val workers = snapshot.toWorkersSafe()
                     callback(Result.success(workers))
                 },
                 onFailure = { e ->
@@ -45,7 +47,7 @@ class WorkerRepository {
         FirebaseHelper.getQueryWithTimeout(db.collection("workers"), 3000) { result ->
             result.fold(
                 onSuccess = { snapshot ->
-                    val workers = snapshot.toObjects(Worker::class.java)
+                    val workers = snapshot.toWorkersSafe()
                     callback(Result.success(workers))
                 },
                 onFailure = { e ->

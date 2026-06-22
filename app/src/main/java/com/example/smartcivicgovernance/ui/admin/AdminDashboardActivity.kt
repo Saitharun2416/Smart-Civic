@@ -69,22 +69,17 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
             .findFragmentById(R.id.adminNavHost) as NavHostFragment
         val navController = navHostFragment.navController
 
-        when (item.itemId) {
-            R.id.adminOverviewFragment -> navController.navigate(R.id.adminOverviewFragment)
-            R.id.complaintsManagementFragment -> navController.navigate(R.id.complaintsManagementFragment)
-            R.id.complaintVerificationFragment -> navController.navigate(R.id.complaintVerificationFragment)
-            R.id.userManagementFragment -> navController.navigate(R.id.userManagementFragment)
-            R.id.analyticsFragment -> navController.navigate(R.id.analyticsFragment)
-            R.id.duplicateDetectionFragment -> navController.navigate(R.id.duplicateDetectionFragment)
-            R.id.adminLogout -> {
-                userRepo.logout()
-                Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, AuthActivity::class.java))
-                finish()
-            }
+        if (item.itemId == R.id.adminLogout) {
+            userRepo.logout()
+            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, AuthActivity::class.java))
+            finish()
+            return true
         }
+
+        val handled = androidx.navigation.ui.NavigationUI.onNavDestinationSelected(item, navController)
         binding.drawerLayout.closeDrawer(GravityCompat.START)
-        return true
+        return handled
     }
 
     override fun onBackPressed() {

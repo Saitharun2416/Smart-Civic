@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smartcivicgovernance.R
 import com.example.smartcivicgovernance.data.model.Complaint
+import com.example.smartcivicgovernance.data.model.toComplaintsSafe
 import com.example.smartcivicgovernance.databinding.ActivityMapViewBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -60,7 +61,7 @@ class MapViewActivity : AppCompatActivity(), OnMapReadyCallback {
         FirebaseHelper.getQueryWithTimeout(FirebaseHelper.db.collection("complaints"), 3000) { result ->
             result.fold(
                 onSuccess = { snapshot ->
-                    val complaints = snapshot.toObjects(Complaint::class.java)
+                    val complaints = snapshot.toComplaintsSafe()
                     plotComplaints(complaints)
                 },
                 onFailure = { e ->

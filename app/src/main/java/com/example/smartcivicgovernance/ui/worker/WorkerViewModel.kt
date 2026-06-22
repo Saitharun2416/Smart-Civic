@@ -4,8 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.smartcivicgovernance.data.model.Complaint
-import com.example.smartcivicgovernance.data.model.Worker
+import com.example.smartcivicgovernance.data.model.*
 import com.example.smartcivicgovernance.data.repository.ComplaintRepository
 import com.example.smartcivicgovernance.data.repository.WorkerRepository
 import com.example.smartcivicgovernance.data.remote.FirebaseHelper
@@ -53,7 +52,7 @@ class WorkerViewModel : ViewModel() {
                     return@addSnapshotListener
                 }
                 if (snapshot != null) {
-                    val avList = snapshot.toObjects(Complaint::class.java).filter {
+                    val avList = snapshot.toComplaintsSafe().filter {
                         it.workerId.isNullOrEmpty() || it.workerId == uid
                     }
                     _availableTasks.value = avList
@@ -71,7 +70,7 @@ class WorkerViewModel : ViewModel() {
                     return@addSnapshotListener
                 }
                 if (snapshot != null) {
-                    val acList = snapshot.toObjects(Complaint::class.java)
+                    val acList = snapshot.toComplaintsSafe()
                     _activeTasks.value = acList
                 }
             }

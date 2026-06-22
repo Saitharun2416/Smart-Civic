@@ -18,10 +18,6 @@ import androidx.core.content.FileProvider
 import com.example.smartcivicgovernance.R
 import com.example.smartcivicgovernance.databinding.ActivityReportComplaintBinding
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import java.io.File
 import java.io.IOException
@@ -29,12 +25,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ReportComplaintActivity : AppCompatActivity(), OnMapReadyCallback {
+class ReportComplaintActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReportComplaintBinding
     private val viewModel: ComplaintViewModel by viewModels()
 
-    private var googleMap: GoogleMap? = null
     private var selectedLatLng: LatLng? = LatLng(40.7128, -74.0060)
     private var selectedAddress: String = ""
 
@@ -46,7 +41,7 @@ class ReportComplaintActivity : AppCompatActivity(), OnMapReadyCallback {
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
-            enableMyLocation()
+            fetchCurrentLocation()
         }
     }
 
@@ -95,12 +90,11 @@ class ReportComplaintActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.spinnerCategory.setAdapter(spinnerAdapter)
         binding.spinnerCategory.setText(categories[0], false)
 
-        // Load map
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
         setupListeners()
         setupObservers()
+
+        // Check location permissions and pre-fill address on start
+        checkLocationPermissions()
     }
 
     private fun setupListeners() {
@@ -117,18 +111,34 @@ class ReportComplaintActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        binding.btnCurrentLoc.setOnClickListener {
-            fetchCurrentLocation()
+        binding.tilAddress.setEndIconOnClickListener {
+            checkLocationPermissions()
         }
 
         binding.btnSubmit.setOnClickListener {
             val title = binding.etTitle.text.toString().trim()
             val description = binding.etDescription.text.toString().trim()
             val category = binding.spinnerCategory.text.toString()
+            val address = binding.etAddress.text.toString().trim()
 
-            if (title.isEmpty() || description.isEmpty() || selectedLatLng == null) {
-                Toast.makeText(this, "Please fill in all fields and select location", Toast.LENGTH_SHORT).show()
+            if (title.isEmpty() || description.isEmpty() || address.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
+            }
+
+            var lat = selectedLatLng?.latitude ?: 0.0
+            var lon = selectedLatLng?.longitude ?: 0.0
+            if (address != selectedAddress) {
+                try {
+                    val geocoder = Geocoder(this, Locale.getDefault())
+                    val addresses = geocoder.getFromLocationName(address, 1)
+                    if (!addresses.isNullOrEmpty()) {
+                        lat = addresses[0].latitude
+                        lon = addresses[0].longitude
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
             viewModel.reportNewComplaint(
@@ -136,9 +146,9 @@ class ReportComplaintActivity : AppCompatActivity(), OnMapReadyCallback {
                 description = description,
                 category = category,
                 imageUri = imageUri,
-                latitude = selectedLatLng!!.latitude,
-                longitude = selectedLatLng!!.longitude,
-                address = selectedAddress
+                latitude = lat,
+                longitude = lon,
+                address = address
             )
         }
     }
@@ -163,37 +173,12 @@ class ReportComplaintActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-        
-        // Default location (e.g. New York or standard central location)
-        val defaultLoc = LatLng(40.7128, -74.0060)
-        googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLoc, 12f))
-
-        googleMap?.setOnCameraIdleListener {
-            val center = googleMap?.cameraPosition?.target ?: return@setOnCameraIdleListener
-            selectedLatLng = center
-            resolveAddress(center.latitude, center.longitude)
-        }
-
-        checkLocationPermissions()
-    }
-
     private fun checkLocationPermissions() {
         val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (permissions.all { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }) {
-            enableMyLocation()
+            fetchCurrentLocation()
         } else {
             requestLocationPermissionLauncher.launch(permissions)
-        }
-    }
-
-    private fun enableMyLocation() {
-        try {
-            googleMap?.isMyLocationEnabled = true
-            fetchCurrentLocation()
-        } catch (e: SecurityException) {
-            e.printStackTrace()
         }
     }
 
@@ -203,7 +188,6 @@ class ReportComplaintActivity : AppCompatActivity(), OnMapReadyCallback {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     val currentLatLng = LatLng(location.latitude, location.longitude)
-                    googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
                     selectedLatLng = currentLatLng
                     resolveAddress(location.latitude, location.longitude)
                 }
@@ -220,12 +204,12 @@ class ReportComplaintActivity : AppCompatActivity(), OnMapReadyCallback {
             if (!addresses.isNullOrEmpty()) {
                 val addressLine = addresses[0].getAddressLine(0)
                 selectedAddress = addressLine
-                binding.tvSelectedAddress.text = "Selected Address: $selectedAddress"
+                binding.etAddress.setText(selectedAddress)
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            binding.tvSelectedAddress.text = "Selected Address: ($lat, $lon)"
-            selectedAddress = "Lat: $lat, Lon: $lon"
+            binding.etAddress.setText("$lat, $lon")
+            selectedAddress = "$lat, $lon"
         }
     }
 

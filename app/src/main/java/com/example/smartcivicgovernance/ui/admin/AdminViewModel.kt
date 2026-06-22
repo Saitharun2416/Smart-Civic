@@ -3,9 +3,7 @@ package com.example.smartcivicgovernance.ui.admin
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.smartcivicgovernance.data.model.Complaint
-import com.example.smartcivicgovernance.data.model.User
-import com.example.smartcivicgovernance.data.model.Worker
+import com.example.smartcivicgovernance.data.model.*
 import com.example.smartcivicgovernance.data.repository.ComplaintRepository
 import com.example.smartcivicgovernance.data.repository.WorkerRepository
 import com.example.smartcivicgovernance.data.remote.FirebaseHelper
@@ -48,7 +46,7 @@ class AdminViewModel : ViewModel() {
                     return@addSnapshotListener
                 }
                 if (snapshot != null) {
-                    val list = snapshot.toObjects(Complaint::class.java)
+                    val list = snapshot.toComplaintsSafe()
                     _complaints.value = list
                 }
             }
@@ -78,7 +76,7 @@ class AdminViewModel : ViewModel() {
                     return@addSnapshotListener
                 }
                 if (snapshot != null) {
-                    val list = snapshot.toObjects(User::class.java)
+                    val list = snapshot.toUsersSafe()
                     _users.value = list
                 }
             }

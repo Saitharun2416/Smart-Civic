@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.smartcivicgovernance.data.model.Complaint
+import com.example.smartcivicgovernance.data.model.toComplaintSafe
 import com.example.smartcivicgovernance.data.repository.ComplaintRepository
 import com.example.smartcivicgovernance.data.remote.FirebaseHelper
 
@@ -51,7 +52,7 @@ class ComplaintViewModel : ViewModel() {
             _loading.value = false
             result.fold(
                 onSuccess = { doc ->
-                    val complaint = doc.toObject(Complaint::class.java)
+                    val complaint = doc.toComplaintSafe()
                     _complaintDetails.value = complaint
                 },
                 onFailure = { e ->
