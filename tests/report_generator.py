@@ -523,7 +523,7 @@ class TestReporter:
                 })
 
         # 2. Generate Excel reports
-        self.generate_excel_test_report(mobile_cases, is_success)
+        self.generate_excel_test_report(mobile_cases, website_cases, load_cases, is_success, website_is_success, load_is_success)
         self.generate_excel_backend_report(self.backend_cases)
         self.generate_excel_website_report(website_cases, website_is_success)
         self.generate_excel_load_report(load_cases, load_is_success)
@@ -534,7 +534,7 @@ class TestReporter:
         # 4. Generate Summary MD
         self.generate_summary(mobile_cases, self.backend_cases, website_cases, load_cases, is_success, website_is_success, load_is_success)
 
-    def generate_excel_test_report(self, mobile_cases, is_success):
+    def generate_excel_test_report(self, mobile_cases, website_cases, load_cases, mobile_success, website_success, load_success):
         wb = Workbook()
         
         # 1. Summary Sheet
@@ -556,51 +556,132 @@ class TestReporter:
         border_thin = Side(border_style="thin", color="D9D9D9")
         cell_border = Border(left=border_thin, right=border_thin, top=border_thin, bottom=border_thin)
         
-        ws_summary.merge_cells("A1:D1")
-        ws_summary["A1"] = "Mobile E2E Test Execution Summary"
+        ws_summary.merge_cells("A1:F1")
+        ws_summary["A1"] = "Smart Civic Governance - Test Execution Summary"
         ws_summary["A1"].font = font_header
         ws_summary["A1"].fill = fill_header
         ws_summary["A1"].alignment = Alignment(horizontal="center", vertical="center")
         ws_summary.row_dimensions[1].height = 40
         
-        ws_summary.append([])
-        ws_summary.append(["Attribute", "Value"])
-        ws_summary["A3"].font = font_bold
-        ws_summary["A3"].fill = fill_sub_header
-        ws_summary["B3"].font = font_bold
-        ws_summary["B3"].fill = fill_sub_header
+        ws_summary.append([]) # Empty A2:F2
         
-        total_steps = len(mobile_cases)
-        passed_steps = sum(1 for c in mobile_cases if c["status"] == "PASS")
-        failed_steps = total_steps - passed_steps
+        # Metrics Header
+        ws_summary.cell(row=3, column=1, value="Attribute").font = font_bold
+        ws_summary.cell(row=3, column=1).fill = fill_sub_header
+        ws_summary.cell(row=3, column=1).border = cell_border
         
-        ws_summary.append(["Suite Name", "Smart Civic Mobile E2E (Appium)"])
-        ws_summary.append(["Execution Date", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
-        ws_summary.append(["Total Test Cases", total_steps])
-        ws_summary.append(["Passed Cases", passed_steps])
-        ws_summary.append(["Failed Cases", failed_steps])
-        ws_summary.append(["Execution Status", "PASSED" if is_success else "FAILED"])
+        ws_summary.cell(row=3, column=2, value="Value").font = font_bold
+        ws_summary.cell(row=3, column=2).fill = fill_sub_header
+        ws_summary.cell(row=3, column=2).border = cell_border
         
-        for row in range(4, 10):
-            ws_summary[f"A{row}"].font = font_bold
-            ws_summary[f"A{row}"].border = cell_border
-            ws_summary[f"B{row}"].font = font_normal
-            ws_summary[f"B{row}"].border = cell_border
+        total_mobile = len(mobile_cases)
+        passed_mobile = sum(1 for c in mobile_cases if c["status"] == "PASS")
+        failed_mobile = total_mobile - passed_mobile
+        
+        total_website = len(website_cases)
+        passed_website = sum(1 for c in website_cases if c["status"] == "PASS")
+        failed_website = total_website - passed_website
+        
+        total_load = len(load_cases)
+        passed_load = sum(1 for c in load_cases if c["status"] == "PASS")
+        failed_load = total_load - passed_load
+        
+        total_combined = total_mobile + total_website + total_load
+        passed_combined = passed_mobile + passed_website + passed_load
+        failed_combined = failed_mobile + failed_website + failed_load
+        combined_success = (failed_combined == 0)
+        
+        metadata = [
+            ("Execution Date", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+            ("Total Test Cases", total_combined),
+            ("Passed Cases", passed_combined),
+            ("Failed Cases", failed_combined),
+            ("Execution Status", "PASSED" if combined_success else "FAILED")
+        ]
+        
+        for idx, (attr, val) in enumerate(metadata, 4):
+            ws_summary.cell(row=idx, column=1, value=attr).font = font_bold
+            ws_summary.cell(row=idx, column=1).border = cell_border
             
-        status_cell = ws_summary["B9"]
-        status_cell.font = font_pass if is_success else font_fail
-        status_cell.fill = fill_pass if is_success else fill_fail
+            val_cell = ws_summary.cell(row=idx, column=2, value=val)
+            val_cell.font = font_normal
+            val_cell.border = cell_border
+            if attr == "Execution Status":
+                val_cell.font = font_pass if combined_success else font_fail
+                val_cell.fill = fill_pass if combined_success else fill_fail
+                
+        # Empty row 9
+        
+        # Separate Summary Grid for Suites starting at Row 10
+        ws_summary.cell(row=10, column=1, value="Test Suite").font = font_bold
+        ws_summary.cell(row=10, column=1).fill = fill_sub_header
+        ws_summary.cell(row=10, column=1).border = cell_border
+        
+        headers_suite = ["Total Cases", "Passed", "Failed", "Pass Rate", "Status"]
+        for c_idx, h in enumerate(headers_suite, 2):
+            cell = ws_summary.cell(row=10, column=c_idx, value=h)
+            cell.font = font_bold
+            cell.fill = fill_sub_header
+            cell.border = cell_border
+            
+        suite_data = [
+            ("Mobile App E2E", total_mobile, passed_mobile, failed_mobile, f"{passed_mobile/total_mobile*100:.1f}%", "PASSED" if mobile_success else "FAILED"),
+            ("Website E2E", total_website, passed_website, failed_website, f"{passed_website/total_website*100:.1f}%", "PASSED" if website_success else "FAILED"),
+            ("Load Testing", total_load, passed_load, failed_load, f"{passed_load/total_load*100:.1f}%", "PASSED" if load_success else "FAILED")
+        ]
+        
+        for idx, (suite, tot, pas, fail, rate, stat) in enumerate(suite_data, 11):
+            cell = ws_summary.cell(row=idx, column=1, value=suite)
+            cell.font = font_bold
+            cell.border = cell_border
+            
+            cell = ws_summary.cell(row=idx, column=2, value=tot)
+            cell.font = font_normal
+            cell.border = cell_border
+            
+            cell = ws_summary.cell(row=idx, column=3, value=pas)
+            cell.font = font_normal
+            cell.border = cell_border
+            
+            cell = ws_summary.cell(row=idx, column=4, value=fail)
+            cell.font = font_normal
+            cell.border = cell_border
+            
+            cell = ws_summary.cell(row=idx, column=5, value=rate)
+            cell.font = font_normal
+            cell.border = cell_border
+            
+            cell = ws_summary.cell(row=idx, column=6, value=stat)
+            cell.border = cell_border
+            cell.alignment = Alignment(horizontal="center")
+            if stat == "PASSED":
+                cell.font = font_pass
+                cell.fill = fill_pass
+            else:
+                cell.font = font_fail
+                cell.fill = fill_fail
 
         for col in ws_summary.columns:
             max_len = max(len(str(cell.value or '')) for cell in col)
             col_letter = get_column_letter(col[0].column)
             ws_summary.column_dimensions[col_letter].width = max(max_len + 3, 15)
 
-        # 2. Test Cases Sheet
-        ws_cases = wb.create_sheet(title="Test Cases")
+        # 2. Mobile Test Cases Sheet
+        self._write_test_cases_sheet(wb, "Mobile Test Cases", mobile_cases, font_bold, font_normal, font_pass, font_fail, fill_sub_header, fill_pass, fill_fail, cell_border)
+        
+        # 3. Website Test Cases Sheet
+        self._write_test_cases_sheet(wb, "Website Test Cases", website_cases, font_bold, font_normal, font_pass, font_fail, fill_sub_header, fill_pass, fill_fail, cell_border)
+        
+        # 4. Load Test Cases Sheet
+        self._write_test_cases_sheet(wb, "Load Test Cases", load_cases, font_bold, font_normal, font_pass, font_fail, fill_sub_header, fill_pass, fill_fail, cell_border)
+        
+        wb.save(self.test_report_excel_path)
+
+    def _write_test_cases_sheet(self, wb, sheet_title, cases, font_bold, font_normal, font_pass, font_fail, fill_sub_header, fill_pass, fill_fail, cell_border):
+        ws_cases = wb.create_sheet(title=sheet_title)
         ws_cases.views.sheetView[0].showGridLines = True
         
-        headers = ["Test Case ID", "Module/Screen", "Description", "Expected Result", "Status", "Error Details", "Timestamp"]
+        headers = ["Test Case ID", "Module", "Description", "Expected Result", "Status", "Error Details", "Timestamp"]
         ws_cases.append(headers)
         ws_cases.row_dimensions[1].height = 25
         
@@ -612,7 +693,7 @@ class TestReporter:
             cell.border = cell_border
             
         now_str = datetime.datetime.now().strftime("%H:%M:%S")
-        for step_idx, tc in enumerate(mobile_cases, 2):
+        for step_idx, tc in enumerate(cases, 2):
             ws_cases.append([tc["id"], tc["module"], tc["desc"], tc["expected"], tc["status"], tc["error"], now_str])
             ws_cases.row_dimensions[step_idx].height = 20
             
@@ -633,8 +714,6 @@ class TestReporter:
             max_len = max(len(str(cell.value or '')) for cell in col)
             col_letter = get_column_letter(col[0].column)
             ws_cases.column_dimensions[col_letter].width = min(max(max_len + 3, 12), 40)
-            
-        wb.save(self.test_report_excel_path)
 
     def generate_excel_backend_report(self, backend_cases):
         wb = Workbook()
