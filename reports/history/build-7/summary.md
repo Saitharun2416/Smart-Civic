@@ -1,14 +1,16 @@
-# Live GitHub Pages E2E Test Summary
+# Mobile, Website & Backend E2E Test Summary
 
 **Deployment URL:**
 https://Saitharun2416.github.io/Smart-Civic/
 
 ### Key Metrics:
-- **Total Tests/Steps:** 7
-- **Passed:** 7
+- **Total Tests Executed:** 920
+- **Passed:** 920
 - **Failed:** 0
-- **Skipped:** 0
 - **Pass Percentage:** 100.0%
 
-### Failed Steps:
-- None. All steps passed cleanly!
+### Appium Mobile E2E Status:
+- **PASSED** ✅
+
+### Website E2E Status:
+- **PASSED** ✅
