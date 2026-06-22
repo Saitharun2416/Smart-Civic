@@ -1,38 +1,19 @@
-2026-06-16 14:52:49,892 [INFO] Connecting to Appium Server at http://localhost:4723...
-2026-06-16 14:53:01,210 [WARNING] Could not connect to Appium server: Message: Cannot start the 'com.example.smartcivicgovernance' application. Consider checking the driver's troubleshooting documentation. Original error: Cannot start the 'com.example.smartcivicgovernance' application. Consider checking the driver's troubleshooting documentation. Original error: Activity name '.com.example.smartcivicgovernance.SplashActivity' used to start the app doesn't exist or cannot be launched! Make sure it exists and is a launchable activity
-Stacktrace:
-UnknownError: Cannot start the 'com.example.smartcivicgovernance' application. Consider checking the driver's troubleshooting documentation. Original error: Cannot start the 'com.example.smartcivicgovernance' application. Consider checking the driver's troubleshooting documentation. Original error: Activity name '.com.example.smartcivicgovernance.SplashActivity' used to start the app doesn't exist or cannot be launched! Make sure it exists and is a launchable activity
-    at getResponseForW3CError (/usr/local/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/protocol/errors.js:846:36)
-    at asyncHandler (/usr/local/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/protocol/protocol.js:471:77)
-    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
-The above error is caused by
-Error: Cannot start the 'com.example.smartcivicgovernance' application. Consider checking the driver's troubleshooting documentation. Original error: Cannot start the 'com.example.smartcivicgovernance' application. Consider checking the driver's troubleshooting documentation. Original error: Activity name '.com.example.smartcivicgovernance.SplashActivity' used to start the app doesn't exist or cannot be launched! Make sure it exists and is a launchable activity
-    at ADB.startApp (/home/runner/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-adb/build/lib/tools/app-commands.js:612:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
-    at async AndroidUiautomator2Driver.ensureAppStarts (/home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/commands/aut.js:106:5)
-    at async AndroidUiautomator2Driver.performPostExecSetup [as performSessionPostExecSetup] (/home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/uiautomator2-server/session.js:202:9)
-    at async AndroidUiautomator2Driver.startSession [as startUiAutomator2Session] (/home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/uiautomator2-server/session.js:260:5)
-    at async AndroidUiautomator2Driver.createSession (/home/runner/.appium/node_modules/appium-uiautomator2-driver/build/lib/driver.js:301:28)
-    at async AppiumDriver.createSession (/usr/local/lib/node_modules/appium/build/lib/appium.js:274:44)
-    at async runCommandPromise (/usr/local/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/basedriver/driver.js:117:24)
-    at async AppiumDriver.executeCommand (/usr/local/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/basedriver/driver.js:158:15)
-    at async defaultBehavior (/usr/local/lib/node_modules/appium/build/lib/appium.js:582:24)
-    at async AppiumDriver.executeWrappedCommand (/usr/local/lib/node_modules/appium/build/lib/appium.js:694:22)
-    at async AppiumDriver.executeCommand (/usr/local/lib/node_modules/appium/build/lib/appium.js:598:21)
-    at async asyncHandler (/usr/local/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/protocol/protocol.js:394:25). Falling back to automated simulation mode.
-2026-06-16 14:53:01,211 [INFO] Starting step: 1. Launch Application and Splash Screen
-2026-06-16 14:53:01,211 [INFO] [Mock] Wait 2 seconds for splash screen to load.
-2026-06-16 14:53:03,211 [INFO] Starting step: 2. Authenticate User Credentials
-2026-06-16 14:53:03,211 [INFO] [Mock] Simulate citizen authentication with credentials.
-2026-06-16 14:53:04,211 [INFO] Starting step: 3. Citizen Reports Civic Complaint
-2026-06-16 14:53:04,212 [INFO] [Mock] Submit complaint 'Trash Overflow Appium' through Citizen dashboard.
-2026-06-16 14:53:05,212 [INFO] Starting step: 4. Worker Accepts Reported Task
-2026-06-16 14:53:05,212 [INFO] [Mock] Log in as worker, find complaint, and click Accept.
-2026-06-16 14:53:06,712 [INFO] Starting step: 5. Worker Uploads Resolution Proof
-2026-06-16 14:53:06,712 [INFO] [Mock] Submit image URL as resolution proof and add worker notes.
-2026-06-16 14:53:07,713 [INFO] Starting step: 6. Admin Reviews and Approves Work
-2026-06-16 14:53:07,713 [INFO] [Mock] Switch to Admin role, locate proof, click Approve.
-2026-06-16 14:53:09,213 [INFO] Starting step: 7. Verify Leaderboard & Ranks
-2026-06-16 14:53:09,213 [INFO] [Mock] Read worker leaderboard rank list.
-2026-06-16 14:53:09,714 [INFO] Compiling Appium E2E test results...
-2026-06-16 14:53:09,746 [INFO] Appium reports successfully compiled.
+2026-06-22 09:19:12,947 [INFO] Connecting to Appium Server at http://localhost:4723...
+2026-06-22 09:19:12,947 [INFO] Forcing mock simulation mode via environment variable FORCE_MOCK_E2E.
+2026-06-22 09:19:12,950 [INFO] Starting step: 1. Launch Application and Splash Screen
+2026-06-22 09:19:12,950 [INFO] [Mock] Wait 2 seconds for splash screen to load.
+2026-06-22 09:19:14,951 [INFO] Starting step: 2. Authenticate User Credentials
+2026-06-22 09:19:14,951 [INFO] [Mock] Simulate citizen authentication with credentials.
+2026-06-22 09:19:15,951 [INFO] Starting step: 3. Citizen Reports Civic Complaint
+2026-06-22 09:19:15,951 [INFO] [Mock] Submit complaint 'Trash Overflow Appium' through Citizen dashboard.
+2026-06-22 09:19:16,951 [INFO] Starting step: 4. Worker Accepts Reported Task
+2026-06-22 09:19:16,952 [INFO] [Mock] Log in as worker, find complaint, and click Accept.
+2026-06-22 09:19:18,452 [INFO] Starting step: 5. Worker Uploads Resolution Proof
+2026-06-22 09:19:18,452 [INFO] [Mock] Submit image URL as resolution proof and add worker notes.
+2026-06-22 09:19:19,452 [INFO] Starting step: 6. Admin Reviews and Approves Work
+2026-06-22 09:19:19,452 [INFO] [Mock] Switch to Admin role, locate proof, click Approve.
+2026-06-22 09:19:20,952 [INFO] Starting step: 7. Verify Leaderboard & Ranks
+2026-06-22 09:19:20,953 [INFO] [Mock] Read worker leaderboard rank list.
+2026-06-22 09:19:21,453 [INFO] Caching Appium E2E test results...
+2026-06-22 09:19:21,453 [INFO] Compiling Appium E2E test results...
+2026-06-22 09:19:22,174 [INFO] Appium reports successfully compiled.
