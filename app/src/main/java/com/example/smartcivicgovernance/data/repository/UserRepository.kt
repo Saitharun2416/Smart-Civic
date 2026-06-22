@@ -73,6 +73,148 @@ class UserRepository {
             }
     }
 
+    fun loginWithGoogle(idToken: String, selectedRole: String, callback: (Result<AuthResult>) -> Unit) {
+        val credential = com.google.firebase.auth.GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val authResult = task.result
+                    val firebaseUser = authResult.user
+                    val uid = firebaseUser?.uid ?: ""
+                    
+                    FirebaseHelper.getDocWithTimeout(db.collection("users").document(uid), 3000) { checkResult ->
+                        checkResult.fold(
+                            onSuccess = { document ->
+                                if (document.exists()) {
+                                    FirebaseHelper.updateFCMToken()
+                                    callback(Result.success(authResult))
+                                } else {
+                                    val newUser = User(
+                                        uid = uid,
+                                        name = firebaseUser?.displayName ?: "Google User",
+                                        email = firebaseUser?.email ?: "",
+                                        role = selectedRole,
+                                        photoUrl = firebaseUser?.photoUrl?.toString() ?: "https://api.dicebear.com/7.x/adventurer/svg?seed=$uid",
+                                        createdAt = com.google.firebase.Timestamp.now(),
+                                        disabled = false
+                                    )
+                                    
+                                    db.collection("users").document(uid).set(newUser)
+                                        .addOnSuccessListener {
+                                            if (selectedRole == "worker") {
+                                                initializeWorkerProfile(uid, newUser.name)
+                                            }
+                                            FirebaseHelper.updateFCMToken()
+                                            callback(Result.success(authResult))
+                                        }
+                                        .addOnFailureListener { e ->
+                                            callback(Result.failure(e))
+                                        }
+                                }
+                            },
+                            onFailure = {
+                                val newUser = User(
+                                    uid = uid,
+                                    name = firebaseUser?.displayName ?: "Google User",
+                                    email = firebaseUser?.email ?: "",
+                                    role = selectedRole,
+                                    photoUrl = firebaseUser?.photoUrl?.toString() ?: "https://api.dicebear.com/7.x/adventurer/svg?seed=$uid",
+                                    createdAt = com.google.firebase.Timestamp.now(),
+                                    disabled = false
+                                )
+                                db.collection("users").document(uid).set(newUser)
+                                    .addOnSuccessListener {
+                                        if (selectedRole == "worker") {
+                                            initializeWorkerProfile(uid, newUser.name)
+                                        }
+                                        FirebaseHelper.updateFCMToken()
+                                        callback(Result.success(authResult))
+                                    }
+                                    .addOnFailureListener { e ->
+                                        callback(Result.failure(e))
+                                    }
+                            }
+                        )
+                    }
+                } else {
+                    callback(Result.failure(task.exception ?: Exception("Google Sign-In failed")))
+                }
+            }
+    }
+
+    fun loginWithPhoneCredential(credential: com.google.firebase.auth.PhoneAuthCredential, selectedRole: String, callback: (Result<AuthResult>) -> Unit) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val authResult = task.result
+                    val firebaseUser = authResult.user
+                    val uid = firebaseUser?.uid ?: ""
+                    
+                    FirebaseHelper.getDocWithTimeout(db.collection("users").document(uid), 3000) { checkResult ->
+                        checkResult.fold(
+                            onSuccess = { document ->
+                                if (document.exists()) {
+                                    FirebaseHelper.updateFCMToken()
+                                    callback(Result.success(authResult))
+                                } else {
+                                    val phoneNum = firebaseUser?.phoneNumber ?: ""
+                                    val displayPhoneName = "Phone User " + (if (phoneNum.length >= 4) phoneNum.takeLast(4) else "XXXX")
+                                    val newUser = User(
+                                        uid = uid,
+                                        name = displayPhoneName,
+                                        email = phoneNum,
+                                        role = selectedRole,
+                                        photoUrl = "https://api.dicebear.com/7.x/adventurer/svg?seed=$uid",
+                                        createdAt = com.google.firebase.Timestamp.now(),
+                                        disabled = false
+                                    )
+                                    
+                                    db.collection("users").document(uid).set(newUser)
+                                        .addOnSuccessListener {
+                                            if (selectedRole == "worker") {
+                                                initializeWorkerProfile(uid, newUser.name)
+                                            }
+                                            FirebaseHelper.updateFCMToken()
+                                            callback(Result.success(authResult))
+                                        }
+                                        .addOnFailureListener { e ->
+                                            callback(Result.failure(e))
+                                        }
+                                }
+                            },
+                            onFailure = {
+                                val phoneNum = firebaseUser?.phoneNumber ?: ""
+                                val displayPhoneName = "Phone User " + (if (phoneNum.length >= 4) phoneNum.takeLast(4) else "XXXX")
+                                val newUser = User(
+                                    uid = uid,
+                                    name = displayPhoneName,
+                                    email = phoneNum,
+                                    role = selectedRole,
+                                    photoUrl = "https://api.dicebear.com/7.x/adventurer/svg?seed=$uid",
+                                    createdAt = com.google.firebase.Timestamp.now(),
+                                    disabled = false
+                                )
+                                db.collection("users").document(uid).set(newUser)
+                                    .addOnSuccessListener {
+                                        if (selectedRole == "worker") {
+                                            initializeWorkerProfile(uid, newUser.name)
+                                        }
+                                        FirebaseHelper.updateFCMToken()
+                                        callback(Result.success(authResult))
+                                    }
+                                    .addOnFailureListener { e ->
+                                        callback(Result.failure(e))
+                                    }
+                            }
+                        )
+                    }
+                } else {
+                    callback(Result.failure(task.exception ?: Exception("Phone verification failed")))
+                }
+            }
+    }
+
+
     private fun initializeWorkerProfile(uid: String, name: String) {
         val workerMap = hashMapOf(
             "uid" to uid,

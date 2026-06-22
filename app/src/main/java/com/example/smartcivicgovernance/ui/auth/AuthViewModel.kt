@@ -50,6 +50,31 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+    fun loginWithGoogle(idToken: String, selectedRole: String) {
+        _loadingState.value = true
+        _errorState.value = null
+        repository.loginWithGoogle(idToken, selectedRole) { result ->
+            _loadingState.value = false
+            result.fold(
+                onSuccess = { authResult -> _authSuccess.value = authResult },
+                onFailure = { exception -> _errorState.value = exception.message }
+            )
+        }
+    }
+
+    fun loginWithPhone(credential: com.google.firebase.auth.PhoneAuthCredential, selectedRole: String) {
+        _loadingState.value = true
+        _errorState.value = null
+        repository.loginWithPhoneCredential(credential, selectedRole) { result ->
+            _loadingState.value = false
+            result.fold(
+                onSuccess = { authResult -> _authSuccess.value = authResult },
+                onFailure = { exception -> _errorState.value = exception.message }
+            )
+        }
+    }
+
+
     fun forgotPassword(email: String) {
         _loadingState.value = true
         _errorState.value = null
