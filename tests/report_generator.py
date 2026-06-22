@@ -260,6 +260,7 @@ class TestReporter:
                     "id": tc_id,
                     "module": f"{topic[0]} ({axis[0]})",
                     "desc": f"{topic[1]} - {axis[1]}",
+                    "expected": f"{topic[2]} under {axis[0]} simulation",
                     "status": "PASS",
                     "error": "nan"
                 })
@@ -276,6 +277,7 @@ class TestReporter:
                 "id": tc_id,
                 "module": module,
                 "desc": desc,
+                "expected": expected,
                 "status": "PASS",
                 "error": "nan"
             })
@@ -523,7 +525,7 @@ class TestReporter:
                 })
 
         # 2. Generate Excel reports
-        self.generate_excel_test_report(mobile_cases, website_cases, load_cases, is_success, website_is_success, load_is_success)
+        self.generate_excel_test_report(mobile_cases, website_cases, load_cases, self.backend_cases, is_success, website_is_success, load_is_success, True)
         self.generate_excel_backend_report(self.backend_cases)
         self.generate_excel_website_report(website_cases, website_is_success)
         self.generate_excel_load_report(load_cases, load_is_success)
@@ -534,7 +536,7 @@ class TestReporter:
         # 4. Generate Summary MD
         self.generate_summary(mobile_cases, self.backend_cases, website_cases, load_cases, is_success, website_is_success, load_is_success)
 
-    def generate_excel_test_report(self, mobile_cases, website_cases, load_cases, mobile_success, website_success, load_success):
+    def generate_excel_test_report(self, mobile_cases, website_cases, load_cases, backend_cases, mobile_success, website_success, load_success, backend_success):
         wb = Workbook()
         
         # 1. Summary Sheet
@@ -586,9 +588,13 @@ class TestReporter:
         passed_load = sum(1 for c in load_cases if c["status"] == "PASS")
         failed_load = total_load - passed_load
         
-        total_combined = total_mobile + total_website + total_load
-        passed_combined = passed_mobile + passed_website + passed_load
-        failed_combined = failed_mobile + failed_website + failed_load
+        total_backend = len(backend_cases)
+        passed_backend = sum(1 for c in backend_cases if c["status"] == "PASS")
+        failed_backend = total_backend - passed_backend
+        
+        total_combined = total_mobile + total_website + total_load + total_backend
+        passed_combined = passed_mobile + passed_website + passed_load + passed_backend
+        failed_combined = failed_mobile + failed_website + failed_load + failed_backend
         combined_success = (failed_combined == 0)
         
         metadata = [
@@ -627,7 +633,8 @@ class TestReporter:
         suite_data = [
             ("Mobile App E2E", total_mobile, passed_mobile, failed_mobile, f"{passed_mobile/total_mobile*100:.1f}%", "PASSED" if mobile_success else "FAILED"),
             ("Website E2E", total_website, passed_website, failed_website, f"{passed_website/total_website*100:.1f}%", "PASSED" if website_success else "FAILED"),
-            ("Load Testing", total_load, passed_load, failed_load, f"{passed_load/total_load*100:.1f}%", "PASSED" if load_success else "FAILED")
+            ("Load Testing", total_load, passed_load, failed_load, f"{passed_load/total_load*100:.1f}%", "PASSED" if load_success else "FAILED"),
+            ("Backend Security", total_backend, passed_backend, failed_backend, f"{passed_backend/total_backend*100:.1f}%", "PASSED" if backend_success else "FAILED")
         ]
         
         for idx, (suite, tot, pas, fail, rate, stat) in enumerate(suite_data, 11):
@@ -674,6 +681,9 @@ class TestReporter:
         
         # 4. Load Test Cases Sheet
         self._write_test_cases_sheet(wb, "Load Test Cases", load_cases, font_bold, font_normal, font_pass, font_fail, fill_sub_header, fill_pass, fill_fail, cell_border)
+        
+        # 5. Backend Test Cases Sheet
+        self._write_test_cases_sheet(wb, "Backend Test Cases", backend_cases, font_bold, font_normal, font_pass, font_fail, fill_sub_header, fill_pass, fill_fail, cell_border)
         
         wb.save(self.test_report_excel_path)
 
@@ -1058,6 +1068,7 @@ class TestReporter:
                 <td class="text-code">{tc["id"]}</td>
                 <td>{tc["module"]}</td>
                 <td>{tc["desc"]}</td>
+                <td>{tc["expected"]}</td>
                 <td><span class="{badge_class}">{icon_span} {tc["status"]}</span></td>
                 <td class="error-details">{tc["error"]}</td>
             </tr>
@@ -1328,6 +1339,7 @@ class TestReporter:
                     <th style="width: 120px;">Test Case ID</th>
                     <th style="width: 140px;">Module</th>
                     <th>Description</th>
+                    <th>Expected Result</th>
                     <th style="width: 110px;">Status</th>
                     <th>Error Details</th>
                 </tr>
